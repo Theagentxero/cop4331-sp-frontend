@@ -1,14 +1,32 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Registration from '../views/Registration.vue'
+// import Home from '../views/Home.vue'
+import BootstrapVue from 'bootstrap-vue'
+// Bootstrap.css
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.use(BootstrapVue)
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'login',
+    component: Login,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Registration,
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     path: '/about',
