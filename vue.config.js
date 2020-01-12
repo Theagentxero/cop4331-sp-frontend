@@ -1,7 +1,7 @@
 //console.log("We Have Begin Working")
 module.exports = {
     devServer: {
-        proxyTable: {
+        proxy: {
         '/api': {
           target: 'http://127.0.0.1:3030',
           pathRewrite: { '^/api': '' },

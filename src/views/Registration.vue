@@ -262,7 +262,7 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     background-position:right top;
-    background-image: url('../assets/home-bg-min.jpg');
+    background-image: url('../assets/wrangler.jpg');
     background-attachment: fixed;
     margin: 0px;
     left:0px;
@@ -298,6 +298,6 @@ input{
     height: 50px;
 }
 .login {
-  background-image: url('../assets/home-bg-min.jpg');
+  background-image: url('../assets/wrangler.jpg');
 }
 </style>

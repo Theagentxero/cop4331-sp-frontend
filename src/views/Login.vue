@@ -113,41 +113,46 @@ export default {
             this.formWaiting = true;
             var values = _.clone(this.form);
             values.password = sha256(values.password);
-            instance.post('api/auth/login', values)
+            instance.post('api/auth/login.json', values)
             .then(async (response) => {
                 this.formComplete = true;
                 this.formWaiting = false;
-                console.log(response.headers);
-                //Get JWT
-                var token = response.data.data.token;
-                var user = response.data.data.user;
-                var config = response.data.data.config;
-                // var if_cookie_exists_expires = response.data.data.session;
-                // localStorage.setItem('if_cookie_exists_expires', if_cookie_exists_expires);
-                // console.log(response.data.data.session)
-                this.$store.commit('setupUserConfigOnLogin', user, config);
-                var a = await this.$store.commit('setJWTandAuthenticate', token);
-                //console.log(this.$store.getters.getAuthPubkeyBuffer)
-                //console.log(this.$store.getters.isAuthenticated);
-                if(this.$store.getters.isAuthenticated){
-                  this.$router.push({path:"/home"});
+                // Fetch User Info From userinfo Cookie
+                var userInfo = null;
+                var seekCookie = "userinfo=";
+                var allRawCookies = document.cookie;
+                //console.log(allRawCookies);
+                var decodedCookies = decodeURIComponent(allRawCookies);
+                //console.log(decodedCookies);
+                // Split Cookies
+                var cookiesAry = decodedCookies.split(';');
+                // Find The Correct Cookie
+                var match = null;
+                cookiesAry.forEach(raw => {
+                    var loc = raw.indexOf(seekCookie);
+                    if(loc != -1){
+                        // Found The Cookie With Our Name
+                        match = raw;
+                    }
+                });
+                if(match != null){
+                    var tmpVal = match.substring(seekCookie.length, match.length);
+                    userInfo = JSON.parse(tmpVal)
+                    console.log(userInfo);
+                    this.$store.commit('login', userInfo);
+                    if(this.$store.getters.isAuthenticated){
+                        this.$router.push({path:"/home"});
+                    }else{
+                        console.log("Not Authenticated");
+                    }
+                }else{
+                    // TODO: Make Some User Alert To Inform User That Cookie Is Missing
                 }
             })
             .catch((error) => {
                 this.formFailed = true;
                 this.formWaiting = false;
-                console.log(error);
-                console.log(error.response.data.status);
-                console.log(error.response.data.info);
-                //Actions On 401
-                if(error.response.data.status == 401){
-                    if(error.response.data.info['0'].code = 4011){
-                       this.invalidLogin = false; 
-                       this.issueText = "Username or Password Invalid";
-                       this.showIssueText = true;
-                       
-                    }
-                }
+                // TODO: Handle Errors
             });
             //alert(JSON.stringify(this.form));
         },
@@ -168,8 +173,8 @@ export default {
     width:100vw;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position:right top;
-    background-image: url('../assets/home-bg-min.jpg');
+    background-position:bottom;
+    background-image: url('../assets/wrangler.jpg');
     background-attachment: fixed;
     margin: 0px;
     left:0px;
@@ -205,7 +210,7 @@ input{
     height: 50px;
 }
 .login {
-  background-image: url('../assets/home-bg-min.jpg');
+  background-image: url('../assets/wrangler.jpg');
 }
 </style>
 
