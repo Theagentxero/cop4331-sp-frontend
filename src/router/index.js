@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Registration from '../views/Registration.vue'
 import Home from '../views/Home.vue'
+import Contacts from '../views/Contacts.vue'
 import BootstrapVue from 'bootstrap-vue'
 import store from '../store/index'
 // Bootstrap.css
@@ -48,6 +49,14 @@ const routes = [
     }
   },
   {
+    path: '/contacts',
+    name: 'contacts',
+    component: Contacts,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting
@@ -67,13 +76,13 @@ const router = new VueRouter({
 router.beforeEach( async (to, from, next) => {
     //console.log("Checking Route");
     // Check if the route requires authentication
-    if(to.meta.requiresAuth) { 
+    if(to.meta.requiresAuth) {
         //console.log("Route Requires Auth");
         // check if the user is authenticated
-        if(store.getters.isAuthenticated) { 
+        if(store.getters.isAuthenticated) {
             //console.log("User Has Auth");
-            // the next method allow the user to continue to the router 
-            next(); 
+            // the next method allow the user to continue to the router
+            next();
         }else{
             //console.log("User Does Not Have Auth");
             // TODO: This should make an auth request that will check the users cookie to check if the user is already logged in, and log them in on this instance
