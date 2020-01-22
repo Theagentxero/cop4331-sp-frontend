@@ -1,0 +1,27 @@
+@mixin cowboy-background {
+    position: fixed;
+    height:100vh;
+    width:100vw;
+    margin: 0px;
+    left:0px;
+    background-size: cover;
+    background-position:bottom;
+    background-image: url('../assets/wrangler.jpg');
+    background-attachment: fixed;
+    filter: brightness(75%);
+}
+
+@mixin input-box-design($single-outer-row, $single-inner-col) {
+    #{$single-outer-row} {
+        height: 100vh;
+        #{$single-inner-col} {
+            background-color: rgba(255, 255, 255, 0.40);
+            border-radius: 1.5rem;
+            padding-top: 1em;
+            padding-bottom: 1.5em;
+            input {
+                background-color: rgba(255, 255, 255, 0.60);
+            }
+        }
+    }
+}

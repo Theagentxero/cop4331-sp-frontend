@@ -1,8 +1,6 @@
 <template>
     <b-container fluid>
-        <div class="login">
-            <div class="login-gauss"></div>
-        </div>
+        <div id="background"/>
         <b-row align-h="center" class="login-tall-row">
             <b-col cols="12" md="8" lg="6" xl="4" align-self="center" class="login-box">
                 <b-row>
@@ -10,7 +8,7 @@
                         <h3>Sign In</h3>
                         <hr>
                         <transition name="issueprompt">
-                            <div v-show = "showIssueText" class="slim">
+                            <div v-show="showIssueText">
                                 {{issueText}}
                             </div>
                         </transition>
@@ -102,8 +100,8 @@ export default {
         return{
             form: formbase,
             invalidLogin: null,
-            showIssueText: false,
-            issueText: '',
+            showIssueText: true,
+            issueText: 'ISSUE',
             formWaiting: false,
         }
     },
@@ -166,51 +164,22 @@ export default {
 }
 </script>
 
-<style scoped>
-.login {
-    position: absolute;
-    height:100vh;
-    width:100vw;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position:bottom;
-    background-image: url('../assets/wrangler.jpg');
-    background-attachment: fixed;
-    margin: 0px;
-    left:0px;
+<style lang="scss" scoped>
+@import '../assets/scss/_mixins.scss';
+
+#background {
+    @include cowboy-background;
 }
-.login-gauss {
-    position: absolute;
-    height:100vh;
-    width:100vw;
-    background-color: rgba(0, 0, 0, 0.25);
-    margin: 0px;
-    left:0px;
-}
-.login-box {
-    background-color: rgba(255, 255, 255, 0.40);
-    border-radius: 1.5rem;
-    padding-top: 1em;
-    padding-bottom: 1.5em;
-}
-.login-tall-row{
-    height: 100vh;
-}
-input{
-    background-color: rgba(255, 255, 255, 0.60);
-}
+
+@include input-box-design(".login-tall-row", ".login-box");
+
+// https://vuejs.org/v2/guide/transitions.html
 .issueprompt-enter-active, .issueprompt-leave-active {
-    -webkit-transition-property: height; /* Safari */
-    -webkit-transition-duration: 0.5s; /* Safari */
     transition-property: height;
     transition-duration: 0.5s;
-
 }
 .issueprompt-enter, .issueprompt-leave-to /* .fade-leave-active below version 2.1.8 */ {
     height: 50px;
-}
-.login {
-  background-image: url('../assets/wrangler.jpg');
 }
 </style>
 

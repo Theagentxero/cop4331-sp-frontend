@@ -1,122 +1,114 @@
 <template>
 <b-container fluid>
-        <div class="login">
-            <div class="login-gauss"></div>
-        </div>
-        <b-form @submit="onSubmit">
-            <b-row align-h="center" class="login-tall-row">
-                <b-col cols="12" md="8" lg="6" xl="4" align-self="center" class="login-box">
-                    <b-row>
-                        <b-col class="text-center">
-                            <h3>Create An Account</h3>
-                            <hr>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col cols="6">
-                            <b-form-group
-                                id="fname-group"
-                                label="First Name"
-                                label-for="first_name"
-                            >
-                                <b-form-input
-                                    id="first_name"
-                                    v-model="form.first_name"
-                                    required
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                        <b-col cols="6">
-                            <b-form-group
-                                id="lname-group"
-                                label="Last Name"
-                                label-for="last_name"
-                            >
-                                <b-form-input
-                                    id="last_name"
-                                    v-model="form.last_name"
-                                    required
-                                ></b-form-input>
-                            </b-form-group>
-                        </b-col>
-                        
-                    </b-row>
-                    <b-row>
-                        <b-col cols="12">
+    <div id="background"/>
+    <b-form @submit="onSubmit">
+        <b-row align-h="center" class="login-tall-row">
+            <b-col cols="12" md="8" lg="6" xl="4" align-self="center" class="login-box">
+                <b-row>
+                    <b-col class="text-center">
+                        <h3>Create An Account</h3>
+                        <hr>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="6">
+                        <b-form-group
+                            id="fname-group"
+                            label="First Name"
+                            label-for="first_name"
+                        >
+                            <b-form-input
+                                id="first_name"
+                                v-model="form.first_name"
+                                required
+                            ></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col cols="6">
+                        <b-form-group
+                            id="lname-group"
+                            label="Last Name"
+                            label-for="last_name"
+                        >
+                            <b-form-input
+                                id="last_name"
+                                v-model="form.last_name"
+                                required
+                            ></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col cols="12">
+                        <b-form-group
+                            id="username-group"
+                            label="Email"
+                            label-for="username"
+                            :state="state.username"
+                            :invalid-feedback="usernameInvalidFeedback"
+                        >
+                            <b-form-input
+                                id="username"
+                                v-model="form.username"
+                                type="email"
+                                :state="state.username"
+                                required
+                                v-on:blur="usernameIsEmail()"
+                                v-on:focus="editingEmail()"
+                            ></b-form-input>
+                        </b-form-group>
                             
-                                <b-form-group
-                                    id="username-group"
-                                    label="Email"
-                                    label-for="username"
-                                    :state="state.username"
-                                    :invalid-feedback="usernameInvalidFeedback"
-                                >
-                                    <b-form-input
-                                        id="username"
-                                        v-model="form.username"
-                                        type="email"
-                                        :state="state.username"
-                                        required
-                                        v-on:blur="usernameIsEmail()"
-                                        v-on:focus="editingEmail()"
-                                    ></b-form-input>
-                                </b-form-group>
-                                
-                                <b-form-group
-                                    id="password-group"
-                                    label="Password"
-                                    label-for="password"
-                                >
-                                    <b-form-input
-                                        id="password"
-                                        v-model="form.password"
-                                        type="password"
-                                        required
-                                        v-on:input="passwordStrength()"
-                                    ></b-form-input>
-                                    <b-badge pill :variant="passStrengthPillVariant">Password Strength: {{passStrengthPillLabel}}</b-badge>
-                                </b-form-group>
-                                <b-form-group
-                                    id="verify-password-group"
-                                    label="Verify Password"
-                                    label-for="verify-password" 
-                                >
-                                    <b-form-input
-                                        id="verify-password"
-                                        v-model="form.verifyPassword"
-                                        type="password"
-                                        required
-                                    ></b-form-input>
-                                </b-form-group>
-                                <b-button block type="submit" variant="success">
-                                    <span v-if="!formWaiting" >Create Account</span>
-                                    <b-spinner v-if="formWaiting" label="Spinning"></b-spinner>
-                                    <span v-if="formComplete" class="glyphicon glyphicon-ok"></span>
-                                    <span v-if="formFailed" class="glyphicon glyphicon-remove"></span>
-                                </b-button>
-                            
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col>
-                            <hr>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col class="text-center">
-                            <b-button variant="light" size="sm" :to="{ path: '/'}">Already Have An Account?</b-button>
-                        </b-col>
-                        <b-col class="text-center">
-                            <b-button variant="light" size="sm">Forgot Your Password</b-button>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        
-                    </b-row>
-                </b-col>
-            </b-row>
-        </b-form>
-    </b-container>
+                        <b-form-group
+                            id="password-group"
+                            label="Password"
+                            label-for="password"
+                        >
+                            <b-form-input
+                                id="password"
+                                v-model="form.password"
+                                type="password"
+                                required
+                                v-on:input="passwordStrength()"
+                            ></b-form-input>
+                            <b-badge pill :variant="passStrengthPillVariant">Password Strength: {{passStrengthPillLabel}}</b-badge>
+                        </b-form-group>
+                        <b-form-group
+                            id="verify-password-group"
+                            label="Verify Password"
+                            label-for="verify-password" 
+                        >
+                            <b-form-input
+                                id="verify-password"
+                                v-model="form.verifyPassword"
+                                type="password"
+                                required
+                            ></b-form-input>
+                        </b-form-group>
+                        <b-button block type="submit" variant="success">
+                            <span v-if="!formWaiting" >Create Account</span>
+                            <b-spinner v-if="formWaiting" label="Spinning"></b-spinner>
+                            <span v-if="formComplete" class="glyphicon glyphicon-ok"></span>
+                            <span v-if="formFailed" class="glyphicon glyphicon-remove"></span>
+                        </b-button>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col>
+                        <hr>
+                    </b-col>
+                </b-row>
+                <b-row>
+                    <b-col class="text-center">
+                        <b-button variant="light" size="sm" :to="{ path: '/'}">Already Have An Account?</b-button>
+                    </b-col>
+                    <b-col class="text-center">
+                        <b-button variant="light" size="sm">Forgot Your Password</b-button>
+                    </b-col>
+                </b-row>
+            </b-col>
+        </b-row>
+    </b-form>
+</b-container>
 </template>
 
 <script>
@@ -254,50 +246,12 @@ export default {
 }
 </script>
 
-<style scoped>
-.login {
-    position: absolute;
-    height:100vh;
-    width:100vw;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position:right top;
-    background-image: url('../assets/wrangler.jpg');
-    background-attachment: fixed;
-    margin: 0px;
-    left:0px;
-}
-.login-gauss {
-    position: absolute;
-    height:100vh;
-    width:100vw;
-    background-color: rgba(0, 0, 0, 0.25);
-    margin: 0px;
-    left:0px;
-}
-.login-box {
-    background-color: rgba(255, 255, 255, 0.40);
-    border-radius: 1.5rem;
-    padding-top: 1em;
-    padding-bottom: 1.5em;
-}
-.login-tall-row{
-    height: 100vh;
-}
-input{
-    background-color: rgba(255, 255, 255, 0.60);
-}
-.issueprompt-enter-active, .issueprompt-leave-active {
-    -webkit-transition-property: height; /* Safari */
-    -webkit-transition-duration: 0.5s; /* Safari */
-    transition-property: height;
-    transition-duration: 0.5s;
+<style lang="scss" scoped>
+@import '../assets/scss/_mixins.scss';
 
+#background {
+    @include cowboy-background;
 }
-.issueprompt-enter, .issueprompt-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    height: 50px;
-}
-.login {
-  background-image: url('../assets/wrangler.jpg');
-}
+
+@include input-box-design(".login-tall-row", ".login-box");
 </style>
