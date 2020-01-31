@@ -90,7 +90,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 * {
@@ -152,6 +152,12 @@ button {
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
     cursor: pointer;
+	@media (max-width: 488px) {
+    	padding: 6px 22px;
+    }
+	@media (max-width: 396px) {
+    	padding: 3px 11px;
+    }
 }
 
 button:active {
@@ -195,6 +201,10 @@ input {
 	width: 768px;
 	max-width: 100%;
 	min-height: 480px;
+	margin-top: 10%;
+	@media (max-width: 1000px) {
+    //   margin-top: 0%;
+    }
 }
 
 .form-container {

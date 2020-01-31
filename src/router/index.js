@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Registration from '../views/Registration.vue'
+import SlideLogin from '../views/slideLogIn.vue'
 import Home from '../views/Home.vue'
 import Contacts from '../views/Contacts.vue'
 import BootstrapVue from 'bootstrap-vue'
@@ -26,8 +27,8 @@ const instance = axios.create({
 const routes = [
   {
     path: '/',
-    name: 'login',
-    component: Login,
+    name: 'SlideLogin',
+    component: SlideLogin,
     meta: {
       requiresAuth: false
     }
