@@ -4,8 +4,9 @@
       <!-- <a class="navbar-brand" href="https://www.google.com" target="_blank">
         <img src="../assets/anonymous_crab_orange.png" alt="Crabbie" class="navbar-icon">
       </a> -->
+      <img src="../assets/crab-orange.svg" alt="Crabbie" class="navbar-icon">
       <b-button v-b-modal.modal-1>
-        <img src="../assets/anonymous_crab_orange.png" alt="Crabbie" class="navbar-icon">
+        
       </b-button>
 
       <b-modal id="modal-1" title="DELETE CRAB">
@@ -32,6 +33,6 @@
 
 <style lang="scss" scoped>
 .navbar-icon {
-  width: 50px;
+  width: 100px;
 }
 </style>
