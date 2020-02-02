@@ -251,6 +251,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$dark-orange: #f69b29;
 $warning-variant: #ffc107;
 
 * {
@@ -303,8 +304,9 @@ a {
 
 button {
 	border-radius: 20px;
-	border: 1px solid #FF9C08;
-	background-color: #FF9C08;
+	border: 1px solid $dark-orange;
+	background-color: $dark-orange;
+;
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;
@@ -441,8 +443,8 @@ input {
 
 .overlay {
 	background: #F69B29;
-	background: -webkit-linear-gradient(to right, #FF9C08, #FFBA08);
-	background: linear-gradient(to right, #FF9C08, #FFBA08);
+	background: -webkit-linear-gradient(to right, $dark-orange, $warning-variant);
+	background: linear-gradient(to right, $dark-orange, $warning-variant);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
