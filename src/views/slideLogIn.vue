@@ -1,6 +1,6 @@
 <template>
 <b-container fluid id="container">
-	<b-form class="form-container sign-up-container" @signUp="signUp">
+	<b-form class="form-container sign-up-container" @submit="signUp">
 		<h1>Sign Up</h1>
 		<b-row>
 			<b-col cols="12" md="6">
@@ -13,13 +13,13 @@
 		<b-form-input v-model="username" id="signUpEmail" type="email" required placeholder="Email"/>
 		<b-form-input v-model="signUpForm.form.password" id="signUpPassword" type="password" required placeholder="Password"/>
 		<b-form-input v-model="signUpForm.form.verifyPassword" id="signUpotherPass" type="password" required placeholder="Re-enter password"/>
-		<b-button type="signUp" variant="warning">Sign Up</b-button>
+		<b-button type="submit" variant="warning">Sign Up</b-button>
 	</b-form>
-	<b-form class="form-container sign-in-container" @signIn="signIn">
+	<b-form class="form-container sign-in-container" @submit="signIn">
 		<h1>Sign in</h1>
 		<b-form-input v-model="username" id="signInEmail" type="email" required placeholder="Email"/>
 		<b-form-input v-model="signInForm.form.password" id="signInPass" type="password" required placeholder="Password"/>
-		<b-button type="signIn" variant="warning">Sign In</b-button>
+		<b-button type="submit" variant="warning">Sign In</b-button>
 	</b-form>
 	<div class="overlay-container">
 		<div class="overlay">
