@@ -1,308 +1,121 @@
 <template>
   <div class="">
-    <div>
-      <b-navbar toggleable="lg" type="light" variant="warning" class="nav">
-        <b-navbar variant="faded" type="light">
-          <b-navbar-brand href="#">
-            <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:60px">
-              Crabrr
-          </b-navbar-brand>
-        </b-navbar>
+    <!-- Navbar -->
+    <b-navbar variant="warning" toggleable="lg">
+      <!-- Navbar Brand -->
+      <b-navbar-brand href="#">
+        <img id="brand-icon" src="../assets/anonymous_crab_orange.png">
+        Crabrr
+      </b-navbar-brand>
 
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <!-- Navbar Toggle Button -->
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav>
-            <b-button variant="warning">Favorite Crabs</b-button>
-            <b-button v-b-modal.modal-prevent-closing variant="warning">Add A Crab</b-button>
-
-                <b-navbar-nav>
-                  <b-nav-item-dropdown>
-                    <template v-slot:button-content>
-                      <em>User</em>
-                    </template>
-                    <b-dropdown-item href="#">Edit Info</b-dropdown-item>
-                    <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-                  </b-nav-item-dropdown>
-                </b-navbar-nav>
-
-                <b-nav-form>
-                  <b-form-input size="sm" class="mr-sm-2" placeholder="Looking for crabbie..."></b-form-input>
-                  <b-button size="sm" class="my-2 my-sm-0" type="submit">Find Crab</b-button>
-                  </b-nav-form>
-            </b-navbar-nav>
+      <!-- Collapsed Navbar Items -->
+      <b-collapse id="nav-collapse" is-nav>
+        <!-- Left Aligned Navbar Items -->
+        <b-navbar-nav>
+          <b-nav-item variant="warning">Favorite Crabs</b-nav-item>
+          <b-nav-item v-b-modal.modal-add-contact variant="warning">Add A Crab</b-nav-item>
+        </b-navbar-nav>
+        
+        <!-- Right Aligned Navbar Items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-form>
+            <b-form-input size="sm" class="mr-sm-2" placeholder="Looking for crabbie..."></b-form-input>
+            <b-button size="sm" class="my-2 my-sm-0" type="submit">Find Crab</b-button>
           </b-nav-form>
-          </b-navbar-nav>
-        </b-collapse>
+          <b-nav-item size="sm" variant="warning">Sign Out</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    
+    <!-- Add Contact Modal -->
+    <b-modal 
+      id="modal-add-contact"
+      ok-variant="warning" 
+      ok-title="Add" 
+      cancel-variant="outline-danger" 
+      header-bg-variant="warning"
+      ref="modal"
+      title="New Contact"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="handleOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group :state="nameState" label="First Name:" label-for="name-input">
+          <b-form-input id="name-input" v-model="name" :state="nameState"></b-form-input>
+        </b-form-group>
 
-          <b-modal ok-variant="warning" ok-title="Add" cancel-variant="outline-danger" header-bg-variant="warning"
-    id="modal-prevent-closing"
-    ref="modal"
-    title="New Contact"
-    @show="resetModal"
-    @hidden="resetModal"
-    @ok="handleOk"
-  >
-    <form ref="form" @submit.stop.prevent="handleSubmit">
-      <b-form-group
-        :state="nameState"
-        label="First Name:"
-        label-for="name-input"
-      >
-        <b-form-input
-          id="name-input"
-          v-model="name"
-          :state="nameState"
-        ></b-form-input>
-      </b-form-group>
+        <b-form-group :state="nameState" label="Middle Name:" label-for="name-input">
+          <b-form-input id="name-input" v-model="name" :state="nameState"></b-form-input>
+        </b-form-group>
 
-      <b-form-group
-        :state="nameState"
-        label="Middle Name:"
-        label-for="name-input"
-      >
-        <b-form-input
-          id="name-input"
-          v-model="name"
-          :state="nameState"
-        ></b-form-input>
-      </b-form-group>
+        <b-form-group :state="nameState" label="Last Name:" label-for="name-input" invalid-feedback="Name is required">
+          <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
+        </b-form-group>
 
-      <b-form-group
-        :state="nameState"
-        label="Last Name:"
-        label-for="name-input"
-        invalid-feedback="Name is required"
-      >
-        <b-form-input
-          id="name-input"
-          v-model="name"
-          :state="nameState"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-<b-row>
-    <b-col>
-      <b-form-group class="b"
-        :state="nameState"
-        label="Phone Number: "
-        label-for="name-input"
-      >
-
-      <b-form-input
-        id="name-input"
-        v-model="name"
-        :state="nameState"
-        required
-      ></b-form-input>
+        <b-row>
+          <b-col>
+            <b-form-group class="b" :state="nameState" label="Phone Number: " label-for="name-input">
+              <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
             </b-form-group>
-    </b-col>
-      <b-col>
-      <b-row class="buttons" align-v="start">
-        <div>
-        <b-button size="sm" squared variant="warning">Personal</b-button>
-        </div>
-        <div>
-        <b-button size="sm" squared variant="warning">Work</b-button>
-        </div>
-        <div>
-        <b-button size="sm" squared variant="warning">Home</b-button>
-        </div>
-        <div>
-        <b-button class="add" size="sm" squared variant="warning"> + </b-button>
-        </div>
+          </b-col>
+          <b-col style="margin-top: 35px;">
+            <b-button size="sm" squared variant="warning">Personal</b-button>
+            <b-button size="sm" squared variant="warning">Work</b-button>
+            <b-button size="sm" squared variant="warning">Home</b-button>
+            <b-button class="add" size="sm" squared variant="warning"> + </b-button>
+          </b-col>
         </b-row>
-      </b-col>
-    </b-row>
+        <b-form-group :state="nameState" label="Email:" label-for="name-input">
+          <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
 
-      <b-form-group
-        :state="nameState"
-        label="Email:"
-        label-for="name-input"
-      >
-        <b-form-input
-          id="name-input"
-          v-model="name"
-          :state="nameState"
-          required
-        ></b-form-input>
-      </b-form-group>
-
-    </form>
-  </b-modal>
-  </b-navbar>
-</b-collapse>
-</b-navbar>
-
-<b-container class="contacts">
-  <b-row align-v="start">
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-  </b-row>
-</b-container>
-
-<b-container class="contacts">
-  <b-row align-v="start">
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-  </b-row>
-</b-container>
-
-<b-container class="contacts">
-  <b-row align-v="start">
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-  </b-row>
-</b-container>
-</div>
-</div>
-</div>
-</div>
+    <b-container v-for="row in numRows" :key="row" class="contacts p-2">
+      <b-row>
+        <b-col class="text-center" v-for="col in numCols" :key="col" cols="6" sm="4" md="3" lg="2">
+          <img class="contact-icon mt-2" src="../assets/anonymous_crab_orange.png">
+          <h1>Mr.Crabs</h1>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 
 <script>
   export default {
-    name: 'contacts'
+    name: 'contacts',
+    data() {
+      return {
+        numRows: 10,
+        numCols: 20
+      }
+    }
   }
 </script>
 
 <style lang="scss" scoped>
+$warning-variant: #ffc107;
 
-
-h1{
-  font-size: 20px;
-  padding: 5px;
-}
-
-.nav{
-  height:2cm;
-  background-color: orange;
-}
-
-.add{
-  font-size:14px;
-}
-
-.buttons{
-  margin-top:35px;
-}
-
-.b{
-  width:200px;
-}
-
-.mr-sm-2{
-  margin-left:550px;
-}
-
-.buttons{
-  margin-left: 1px;
+#brand-icon {
+  width: 60px;
 }
 
 .contacts{
-  width: 2200px;
-  background-color: #ffbf00;
-  margin-top: 80px;
-  margin-bottom: 80px;
-  padding: 30px;
+  background-color: $warning-variant !important;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
   box-shadow: 0px 0px 10px 3.5px gray;
-  color:black;
-}
-
-.navbar-icon {
-  width: 50px;
+  h1{
+    font-size: 20px;
+  }
+  .contact-icon {
+    width: 90px;
+  }
 }
 </style>
