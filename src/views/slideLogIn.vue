@@ -1,43 +1,41 @@
 <template>
-<div class="container" id="container">
-	<div class="form-container sign-up-container">
-		<form action="#">
-            <h1>Sign Up</h1>
-			<br />
-        <div>
-        <input v-model="signUpForm.form.first_name" placeholder="First Name" id="signUpfName" type='text' style='display: inline; width: 132px; margin-right: 0.25cm;' />    
-        <input v-model="signUpForm.form.last_name" placeholder="Last Name" id="signUplName" type='text' style='display: inline; width: 132px; margin-left: 0.25cm;' />
-		</div>
-		<input v-model="username" id="signUpEmail" type="email" placeholder="Email">
-		<input v-model="signUpForm.form.password" id="signUpPassword" type="password" placeholder="Password">
-		<input v-model="signUpForm.form.verifyPassword" id="signUpotherPass" type="password" placeholder="Re-enter password">
-			<button v-on:click="signUp()">Sign Up</button>
-		</form>
-	</div>
-	<div class="form-container sign-in-container">
-		<form action="#">
-			<h1>Sign in</h1>
-			<br />
-			<input v-model="username" type="email" placeholder="Email" id="signInEmail" />
-			<input v-model="signInForm.form.password" type="password" placeholder="Password" id="signInPass" />
-			<button v-on:click="signIn()" >Sign In</button>
-		</form>
-	</div>
+<b-container fluid id="container">
+	<b-form class="form-container sign-up-container" @signUp="signUp">
+		<h1>Sign Up</h1>
+		<b-row>
+			<b-col cols="12" md="6">
+				<b-form-input v-model="signUpForm.form.first_name" id="signUpfName" type='text' required placeholder="First Name"/>    
+			</b-col>
+			<b-col cols="12" md="6">
+				<b-form-input v-model="signUpForm.form.last_name" id="signUplName" type='text' required placeholder="Last Name"/>
+			</b-col>
+		</b-row>
+		<b-form-input v-model="username" id="signUpEmail" type="email" required placeholder="Email"/>
+		<b-form-input v-model="signUpForm.form.password" id="signUpPassword" type="password" required placeholder="Password"/>
+		<b-form-input v-model="signUpForm.form.verifyPassword" id="signUpotherPass" type="password" required placeholder="Re-enter password"/>
+		<b-button type="signUp" variant="warning">Sign Up</b-button>
+	</b-form>
+	<b-form class="form-container sign-in-container" @signIn="signIn">
+		<h1>Sign in</h1>
+		<b-form-input v-model="username" id="signInEmail" type="email" required placeholder="Email"/>
+		<b-form-input v-model="signInForm.form.password" id="signInPass" type="password" required placeholder="Password"/>
+		<b-button type="signIn" variant="warning">Sign In</b-button>
+	</b-form>
 	<div class="overlay-container">
 		<div class="overlay">
 			<div class="overlay-panel overlay-left">
 				<h1>Have an account?</h1>
 				<p>We missed you! <br /> Press below to Sign In.</p>
-				<button v-on:click="moveRight()" class="ghost" id="signIn">Sign In</button>
+				<b-button variant="warning" v-on:click="moveRight()" class="ghost" id="signIn">Sign In</b-button>
 			</div>
 			<div class="overlay-panel overlay-right">
 				<h1>Create an account!</h1>
 				<p>We are pumped to have you on board! <br /> Click below to start right away!</p>
-				<button v-on:click="moveLeft()" class="ghost" id="signUp">Sign Up</button>
+				<b-button variant="warning" v-on:click="moveLeft()" class="ghost" id="signUp">Sign Up</b-button>
 			</div>
 		</div>
 	</div>
-</div>
+</b-container>
 </template>
 
 <script>
@@ -253,19 +251,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+$warning-variant: #ffc107;
 
 * {
 	box-sizing: border-box;
 }
 
 body {
-	background: #f6f5f7;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-	font-family: 'Montserrat', sans-serif;
 	height: 100vh;
 	margin: -20px 0 50px;
 }
@@ -273,6 +269,9 @@ body {
 h1 {
 	font-weight: bold;
 	margin: 0;
+	@media (max-width: 450px) {
+    	font-size: 2rem;
+    }
 }
 
 .inlineinput div {
@@ -344,6 +343,18 @@ form {
 	padding: 0 50px;
 	height: 100%;
 	text-align: center;
+	@media (max-width: 720px) {
+		padding: 0 40px;
+    }
+	@media (max-width: 630px) {
+		padding: 0 30px;
+    }
+	@media (max-width: 540px) {
+		padding: 0 20px;
+    }
+	@media (max-width: 450px) {
+		padding: 0 10px;
+    }
 }
 
 input {
@@ -354,7 +365,7 @@ input {
 	width: 100%;
 }
 
-.container {
+.container-fluid {
 	background-color: #fff;
 	border-radius: 10px;
 	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -364,9 +375,6 @@ input {
 	max-width: 100%;
 	min-height: 480px;
 	margin-top: 10%;
-	@media (max-width: 1000px) {
-    //   margin-top: 0%;
-    }
 }
 
 .form-container {
@@ -383,7 +391,7 @@ input {
 }
 
 
-.container.right-panel-active .sign-in-container {
+.container-fluid.right-panel-active .sign-in-container {
 	transform: translateX(100%);
 }
 
@@ -394,7 +402,7 @@ input {
 	z-index: 1;
 }
 
-.container.right-panel-active .sign-up-container {
+.container-fluid.right-panel-active .sign-up-container {
 	transform: translateX(100%);
 	opacity: 1;
 	z-index: 5;
@@ -424,7 +432,7 @@ input {
 	z-index: 100;
 }
 
-.container.right-panel-active .overlay-container{
+.container-fluid.right-panel-active .overlay-container{
 	transform: translateX(-100%);
 }
 
@@ -447,7 +455,7 @@ input {
 	transition: transform 0.6s ease-in-out;
 }
 
-.container.right-panel-active .overlay {
+.container-fluid.right-panel-active .overlay {
     transform: translateX(50%);
 }
 
@@ -472,7 +480,7 @@ input {
 }
 
 
-.container.right-panel-active .overlay-left {
+.container-fluid.right-panel-active .overlay-left {
 	transform: translateX(0);
 }
 
@@ -481,7 +489,7 @@ input {
 	transform: translateX(0);
 }
 
-.container.right-panel-active .overlay-right {
+.container-fluid.right-panel-active .overlay-right {
 	transform: translateX(20%);
 }
 </style>
