@@ -13,13 +13,13 @@
 		<b-form-input v-model="username" id="signUpEmail" type="email" required placeholder="Email"/>
 		<b-form-input v-model="signUpForm.form.password" id="signUpPassword" type="password" required placeholder="Password"/>
 		<b-form-input v-model="signUpForm.form.verifyPassword" id="signUpotherPass" type="password" required placeholder="Re-enter password"/>
-		<b-button type="submit" variant="warning">Sign Up</b-button>
+		<b-button type="submit" variant="warning" @click="signUp">Sign Up</b-button>
 	</b-form>
 	<b-form class="form-container sign-in-container" @submit="signIn">
 		<h1>Sign in</h1>
 		<b-form-input v-model="username" id="signInEmail" type="email" required placeholder="Email"/>
 		<b-form-input v-model="signInForm.form.password" id="signInPass" type="password" required placeholder="Password"/>
-		<b-button type="submit" variant="warning">Sign In</b-button>
+		<b-button type="submit" variant="warning" @click="signIn" >Sign In</b-button>
 	</b-form>
 	<div class="overlay-container">
 		<div class="overlay">
@@ -93,11 +93,11 @@ export default {
     },
     methods: {
         signIn: function() {
-			event.preventDefault();
-			this.formWaiting = true;
-			this.signInForm.form.username = this.username;
-            var values = _.clone(this.signInForm.form);
-            values.password = sha256(values.password);
+            event.preventDefault();
+            this.formWaiting = true;
+            var values = {};
+            values.username = this.username;
+            values.password = sha256(this.signInForm.form.password);
             instance.post('api/auth/login.json', values)
             .then(async (response) => {
                 this.formComplete = true;
@@ -106,9 +106,7 @@ export default {
                 var userInfo = null;
                 var seekCookie = "userinfo=";
                 var allRawCookies = document.cookie;
-                //console.log(allRawCookies);
                 var decodedCookies = decodeURIComponent(allRawCookies);
-                //console.log(decodedCookies);
                 // Split Cookies
                 var cookiesAry = decodedCookies.split(';');
                 // Find The Correct Cookie
@@ -122,8 +120,7 @@ export default {
                 });
                 if(match != null){
                     var tmpVal = match.substring(seekCookie.length, match.length);
-                    userInfo = JSON.parse(tmpVal)
-                    console.log(userInfo);
+                    userInfo = JSON.parse(tmpVal);
                     this.$store.commit('login', userInfo);
                     if(this.$store.getters.isAuthenticated){
                         this.$router.push({path:"/home"});
@@ -139,7 +136,6 @@ export default {
                 this.formWaiting = false;
                 // TODO: Handle Errors
             });
-            console.log(this.signInForm)
         },
         signUp: function() {
 			event.preventDefault();
@@ -150,10 +146,10 @@ export default {
 			this.formWaiting = true;
 			this.signUpForm.form.username = this.username;
             var values = _.clone(this.signUpForm.form);
-            console.log(values)
+            //console.log(values)
             values.password = sha256(values.password);
             values.verifyPassword = null;
-            console.log(values)
+            //console.log(values)
             axios.post('api/auth/create.json', values)
             .then((response) => {
                 this.formComplete = true;
@@ -167,8 +163,10 @@ export default {
                     // TODO: This means that the user already exits
                     // Put Something On The Screen To Say That
                 }
+                // Can Throw ERRORS
+                // 403 - Username already exists
                 console.log(error);
-                console.log(error.response.data.status);
+                console.log(error.response.data.errors);
                 console.log(error.response.data.info);
             });
             //alert(JSON.stringify(this.form));
@@ -196,7 +194,7 @@ export default {
             if(!meetsMin){
                 str = 0;
             }
-            console.log(str);
+            //console.log(str);
             if(str == 0){
                 this.passStrengthPillLabel = "Unsuitable - Must Be 8 Characters Long"
                 this.passStrengthPillVariant = "danger"
