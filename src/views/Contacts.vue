@@ -43,7 +43,7 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
+      <b-form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group :state="nameState" label="First Name:" label-for="name-input">
           <b-form-input id="name-input" v-model="name" :state="nameState"></b-form-input>
         </b-form-group>
@@ -69,10 +69,20 @@
             <b-button class="add" size="sm" squared variant="warning"> + </b-button>
           </b-col>
         </b-row>
-        <b-form-group :state="nameState" label="Email:" label-for="name-input">
-          <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
-        </b-form-group>
-      </form>
+        <b-row>
+          <b-col>
+            <b-form-group :state="nameState" label="Email:" label-for="name-input">
+              <b-form-input id="name-input" v-model="name" :state="nameState" required></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col style="margin-top: 35px;">
+            <b-button size="sm" squared variant="warning">Personal</b-button>
+            <b-button size="sm" squared variant="warning">Work</b-button>
+            <b-button size="sm" squared variant="warning">Home</b-button>
+            <b-button class="add" size="sm" squared variant="warning"> + </b-button>
+          </b-col>
+        </b-row>
+      </b-form>
     </b-modal>
 
     <b-container v-for="row in numRows" :key="row" class="contacts p-2">
