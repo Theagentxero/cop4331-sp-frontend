@@ -1,7 +1,7 @@
 <template>
-  <div class="">
-    <div>
-      <b-navbar toggleable="lg" type="light" variant="warning" class="nav">
+  <div id="contact">
+      <Contact v-bind:contact="contact" v-on:delete-contact="deleteContact" />
+      <b-navbar toggleable="lg" type="light" class="nav">
         <b-navbar variant="faded" type="light">
           <b-navbar-brand href="#">
             <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:60px">
@@ -13,8 +13,8 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-button variant="warning">Favorite Crabs</b-button>
-            <b-button v-b-modal.modal-prevent-closing variant="warning">Add A Crab</b-button>
+            <b-button class="home" variant="outline-warning">Favorite Crabs</b-button>
+            <b-button v-b-modal.modal-prevent-closing class="home" variant="outline-warning">Add A Crab</b-button>
 
                 <b-navbar-nav>
                   <b-nav-item-dropdown>
@@ -27,7 +27,7 @@
                 </b-navbar-nav>
 
                 <b-nav-form>
-                  <b-form-input size="sm" class="mr-sm-2" placeholder="Looking for crabbie..."></b-form-input>
+                  <b-form-input size="sm" class="mr-sm-2" placeholder="Looking for..."></b-form-input>
                   <b-button size="sm" class="my-2 my-sm-0" type="submit">Find Crab</b-button>
                   </b-nav-form>
             </b-navbar-nav>
@@ -138,114 +138,19 @@
 <b-container class="contacts">
   <b-row align-v="start">
     <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
+      <div>
+        <b-button class="home" variant="outline-warning" v-b-modal.modal-1><img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px"></b-button>
+        <b-modal ok-variant="warning" id="modal-1" title="Mr.Crabs" cancel-variant="warning" cancel-title="Edit">
+          <p class="my-4">Email:</p>
+          <p class="my-4">Phone (work): 40777777</p>
+          <b-button size="sm" squared variant="warning">Delete </b-button>
+        </b-modal>
+      </div>
       <h1>Mr.Crabs</h1>
     </b-col>
   </b-row>
 </b-container>
 
-<b-container class="contacts">
-  <b-row align-v="start">
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-  </b-row>
-</b-container>
-
-<b-container class="contacts">
-  <b-row align-v="start">
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-    <b-col>
-      <img src="https://cdn.discordapp.com/attachments/664299938074722315/667846011808382980/anonymous_crab_orange.png" style="width:90px">
-      <h1>Mr.Crabs</h1>
-    </b-col>
-  </b-row>
-</b-container>
 </div>
 </div>
 </div>
@@ -254,30 +159,53 @@
 
 
 <script>
+  import Contact from './Contact';
   export default {
-    name: 'contacts'
-  }
+    name: 'contact',
+    components: {
+      Contact
+    },
+    data() {
+      return {
+        contact: [
+          {
+            id: 1,
+            //phone and email here?
+          },
+          {
+            id: 2,
+            //phone and email here?
+          },
+          {
+            id: 3,
+            //phone and email here?
+          },
+        ]
+      }
+    },
+    methods: {
+      deleteContact(id){
+        this.contact = this.contact.filter(contact => contact.id !== id);
+      }
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-
-
 h1{
   font-size: 20px;
-  padding: 5px;
+  margin-left: 12px;
 }
 
 .nav{
   height:2cm;
-  background-color: orange;
+  background-color: #FF9C08;
+  box-shadow: 0px 0px 5px 2px orange;
+  color:black;
 }
 
 .add{
   font-size:14px;
-}
-
-.buttons{
-  margin-top:35px;
 }
 
 .b{
@@ -292,9 +220,23 @@ h1{
   margin-left: 1px;
 }
 
+.home{
+  background-color: #FF9C08;
+  color: black;
+  border: none;
+  &:hover {
+    background-color: #FF9C08;
+    border: none;
+  }
+}
+
+.contacts{
+  background-color: #FF9C08;
+}
+
 .contacts{
   width: 2200px;
-  background-color: #ffbf00;
+  background-color: #FF9C08;
   margin-top: 80px;
   margin-bottom: 80px;
   padding: 30px;
