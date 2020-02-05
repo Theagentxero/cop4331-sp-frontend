@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!-- Navbar -->
-    <b-navbar variant="warning" toggleable="lg">
+    <b-navbar id="navbar" variant="warning" toggleable="lg">
       <!-- Navbar Brand -->
       <b-navbar-brand href="#">
         <img id="brand-icon" src="../assets/anonymous_crab_orange.png">
@@ -17,14 +17,19 @@
         <b-navbar-nav>
           <b-nav-item variant="warning">Favorite Crabs</b-nav-item>
           <b-nav-item v-b-modal.add-contact-modal variant="warning">Add A Crab</b-nav-item>
+          <b-nav-item-dropdown>
+            <template v-slot:button-content>
+              <em>User</em>
+            </template>
+            <b-dropdown-item href="#">Edit Info</b-dropdown-item>
+            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          </b-nav-item-dropdown>
         </b-navbar-nav>
         <!-- Right Aligned Navbar Items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-2" placeholder="Looking for crabbie..."></b-form-input>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit">Find Crab</b-button>
+            <b-form-input id="search-field" size="lg" class="mr-sm-2" placeholder="Looking for crabbie..."></b-form-input>
           </b-nav-form>
-          <b-nav-item size="sm" variant="warning">Sign Out</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -203,7 +208,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$warning-variant: #ffc107;
+$warning-variant: #f69b29;
 
 #brand-icon {
   width: 60px;
@@ -233,5 +238,17 @@ $warning-variant: #ffc107;
     margin-top: 4px;
     padding-left: 0px;
   }
+}
+#navbar{
+  background: $warning-variant;
+  box-shadow: 0px 0px 5px 2px $warning-variant;
+  color:black;
+  #search-field {
+    width: 50vw;
+  }
+}
+
+.bg-warning {
+    background-color: $warning-variant !important;
 }
 </style>
