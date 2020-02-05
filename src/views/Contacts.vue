@@ -157,7 +157,6 @@
 </div>
 </template>
 
-
 <script>
   import Contact from './Contact';
   export default {
@@ -241,10 +240,24 @@ h1{
   margin-bottom: 80px;
   padding: 30px;
   box-shadow: 0px 0px 10px 3.5px gray;
-  color:black;
+  h1{
+    font-size: 20px;
+  }
+  .contact-icon {
+    width: 90px;
+  }
 }
-
-.navbar-icon {
-  width: 50px;
+.modal-phone-and-email {
+  .options-dropdown {
+    margin-top: 32px;
+  }
+  .plus-button {
+    margin-top: 35px;
+    padding-left: 0px;
+  }
+  .plus-button-xtra {
+    margin-top: 4px;
+    padding-left: 0px;
+  }
 }
 </style>
