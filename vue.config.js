@@ -1,14 +1,21 @@
 //console.log("We Have Begin Working")
 module.exports = {
-    devServer: {
-        proxy: {
-        '/api': {
-          target: 'https://api.crabrr.com',
-          pathRewrite: { '^/api': '' },
-          changeOrigin: true,
-          secure: false
-        }
+  devServer: {
+      proxy: {
+      '/api': {
+        target: 'https://api.crabrr.com',
+        pathRewrite: { '^/api': '' },
+        changeOrigin: true,
+        secure: false
       }
     }
-  
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: `@import "@/assets/scss/_global.scss";`
+      }
+    }
   }
+  
+}
