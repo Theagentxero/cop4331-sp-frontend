@@ -15,7 +15,7 @@
               v-model="contact.emails"
               type="email"
               placeholder="Enter email"
-              disabled="true"
+              :disabled=true
             ></b-form-input>
           </b-form-group>
         </b-col>
@@ -32,7 +32,6 @@
             <b-form-input
               id="input-2"
               v-model="contact.phoneNumbers"
-              type="phone"
               placeholder="Enter phone #"
             ></b-form-input>
           </b-form-group>
