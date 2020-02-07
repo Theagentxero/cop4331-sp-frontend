@@ -27,7 +27,7 @@ const instance = axios.create({
 const routes = [
   {
     path: '/',
-    name: 'SlideLogin',
+    name: 'login',
     component: SlideLogin,
     meta: {
       requiresAuth: false
