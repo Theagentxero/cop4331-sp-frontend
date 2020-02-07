@@ -13,34 +13,15 @@ import Navbar from './Navbar.vue';
 import AddContact from './AddContact.vue'
 import ContactList from './ContactList.vue'
 
-const axios = require('axios');
-const uuidv4 = require('uuid/v4');
-const jwt = require('jsonwebtoken');
-const _ = require('underscore');
-var sha256 = require('js-sha256');
-const instance = axios.create({
-    timeout: 10000,
-    headers: {'Content-Type': 'application/json'},
-    withCredentials: true
-});
 export default {
   name: 'Contacts',
   components: {
     Navbar,
     AddContact,
     ContactList
-  },
-  data() {
-    return {
-      numRows: 10,
-      numCols: 20,
-    }
-  },
-  methods: {
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 .contacts{

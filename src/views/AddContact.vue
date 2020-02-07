@@ -8,7 +8,6 @@
     ref="add-contact-modal"
     title="New Contact"
     @show="resetModal"
-    @hidden="resetModal"
     @ok="handleOk"
   >
     <b-form ref="form" @submit.stop.prevent="handleSubmit">
@@ -33,7 +32,7 @@
             >
               <b-form-input
                 id="phone-number-input"
-                v-model="addContactSubmitForm.phoneNumbers[index].name"
+                v-model="addContactSubmitForm.phoneNumbers[index].value"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -41,7 +40,7 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <b-form-select
                 id="input-1"
-                v-model="addContactSubmitForm.phoneNumbers[index].value"
+                v-model="addContactSubmitForm.phoneNumbers[index].name"
                 :options="typeOptions"
                 required
               ></b-form-select>
@@ -56,14 +55,14 @@
         <b-row class="modal-phone-and-email">
           <b-col cols="6">
             <b-form-group :label="(index == 0) ? 'Email: ' : ''" label-for="email-input">
-              <b-form-input id="email-input" v-model="addContactSubmitForm.emails[index].name"></b-form-input>
+              <b-form-input id="email-input" v-model="addContactSubmitForm.emails[index].value"></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
             <b-form-group id="input-group-2" label-for="input-2">
               <b-form-select
                 id="input-2"
-                v-model="addContactSubmitForm.emails[index].value"
+                v-model="addContactSubmitForm.emails[index].name"
                 :options="typeOptions"
                 required
               ></b-form-select>
@@ -80,6 +79,13 @@
 
 <script>
 const _ = require('underscore');
+const axios = require('axios');
+
+const instance = axios.create({
+    timeout: 10000,
+    headers: {'Content-Type': 'application/json'},
+    withCredentials: true
+});
 
 export default {
   name: "AddContact",
@@ -93,17 +99,20 @@ export default {
         lastName: "",
         phoneNumbers: [
           {
-            name: "",
-            value: "Home"
+            name: "Home",
+            value: ""
           }
         ],
         emails: [
           {
-            name: "",
-            value: "Home"
+            name: "Home",
+            value: ""
           }
         ]
-      }
+      },
+      pageStatus: {
+        waitingOnAPICall: false
+      },
     };
   },
   methods: {
@@ -118,14 +127,14 @@ export default {
       this.addContactSubmitForm.lastName = "";
       this.addContactSubmitForm.phoneNumbers = [
         {
-          name: "",
-          value: "Home"
+          name: "Home",
+          value: ""
         }
       ];
       this.addContactSubmitForm.emails = [
         {
-          name: "",
-          value: "Home"
+          name: "Home",
+          value: ""
         }
       ];
     },
@@ -138,13 +147,17 @@ export default {
     handleSubmit() {
       var payload = _.clone(this.addContactSubmitForm);
       // Blanks out value if no phone #/email exists
-      payload.phoneNumbers = payload.phoneNumbers.filter(number => number.name != "");
-      payload.emails = payload.emails.filter(email => email.name != "");
+      payload.phoneNumbers = payload.phoneNumbers.filter(number => number.value != "");
+      payload.emails = payload.emails.filter(email => email.value != "");
       // Exit when the form isn't valid
       if (!this.checkFormValidity()) {
         return;
       }
-      console.log(payload)
+      if (!this.isValidContact(payload)) {
+        return;
+      }
+
+      this.createContact(payload)
       // Hide the modal manually
       this.$nextTick(() => {
         // Access by reference
@@ -156,16 +169,39 @@ export default {
     },
     addPhoneNumber() {
       this.addContactSubmitForm.phoneNumbers.push({
-        name: "",
-        value: "Home"
+        name: "Home",
+        value: ""
       })
     },
     addEmail() {
-      console.log('hi')
       this.addContactSubmitForm.emails.push({
-        name: "",
-        value: "Home"
+        name: "Home",
+        value: ""
       })
+    },
+    isValidContact(payload) {
+      if (payload.firstName == '' &&
+          payload.middleName == '' &&
+          payload.lastName == '' &&
+          payload.phoneNumbers.length == 0 &&
+          payload.emails.length == 0)
+          return false
+        else
+          return true
+    },
+    createContact(payload) {
+      this.pageStatus.waitingOnAPICall = true;
+      console.log(payload)
+      instance.post('api/contacts', payload)
+      .then(async (response) => {
+        this.pageStatus.waitingOnAPICall = false;
+        this.$store.commit({type: 'addContact', amount: payload})
+      })
+      .catch((error) => {
+        this.pageStatus.waitingOnAPICall = false;
+        // TODO: Handle Errors
+        console.log(error);
+      });
     }
   }
 };

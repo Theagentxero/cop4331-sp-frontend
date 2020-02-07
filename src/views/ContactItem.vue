@@ -5,7 +5,10 @@
     </b-button>
     <h1 v-if="contact.firstName != ''">{{contact.firstName}}</h1>
     <h1 v-else-if="contact.middleName != ''">{{contact.middleName}}</h1>
-    <h1 v-else>{{contact.lastName}}</h1>
+    <h1 v-else-if="contact.lastName != ''">{{contact.lastName}}</h1>
+    <h1 v-else-if="contact.phoneNumbers.length != 0">{{contact.phoneNumbers[0].value}}</h1>
+    <h1 v-else-if="contact.emails.length != 0">{{contact.emails[0].value}}</h1>
+    <h1 v-else>No Info</h1>
   </b-col>
   <b-col v-else cols="12">
     <EditContact @closeComponent="updateSelected" :contact="contact" />

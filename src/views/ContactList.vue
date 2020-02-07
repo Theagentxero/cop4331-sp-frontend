@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-container v-for="section, i in contactSections" class="contacts p-2">
+    <b-container class="contacts p-2">
       <b-row>
-        <ContactItem :contact="contactSections[i][j]" v-for="contact, j in section" />
+        <ContactItem v-for="contact in contactSections" :key="contact._id" :contact="contact"/>
       </b-row>
     </b-container>
   </div>
@@ -10,6 +10,16 @@
 
 <script>
 import ContactItem from './ContactItem.vue'
+
+const _ = require('underscore');
+const axios = require('axios');
+
+const instance = axios.create({
+    timeout: 10000,
+    headers: {'Content-Type': 'application/json'},
+    withCredentials: true
+});
+
 export default {
   name: "ContactList",
   components: {
@@ -17,66 +27,30 @@ export default {
   },
   data() {
     return {
-      contactSections: [
-        [
-          {
-          userID: "1",
-          firstName: "AHole",
-          middleName: "Elias",
-          lastName: "Mora",
-          favorite: true,
-          phoneNumbers: [
-            // Some Collection or Zero or More Objects Fitting This Prototype
-            { name: "111-111-1111", value: "home" }
-          ],
-          emails:[
-            // Some Collection or Zero or More Objects Fitting This Prototype
-            { name: "aye@aye.com", value:"personal" },
-            { name: "aye2@aye2.com", value:"home" }
-          ]
-          },
-          {
-            userID: "2",
-            firstName: "AJoe",
-            middleName: "El3ias",
-            lastName: "Mor4a",
-            favorite: false,
-            phoneNumbers: [
-              // Some Collection or Zero or More Objects Fitting This Prototype
-              { name: "151-111-1111", value: "home" }
-            ],
-            emails:[
-              // Some Collection or Zero or More Objects Fitting This Prototype
-              { name: "ane@aye.com", value:"gogo" },
-              { name: "ane2@aye2.com", value:"gadget" }
-            ]
-          }
-        ],
-        [
-          {
-            userID: "3",
-            firstName: "",
-            middleName: "Bl3ias",
-            lastName: "Mor4a",
-            favorite: true,
-            phoneNumbers: [
-              // Some Collection or Zero or More Objects Fitting This Prototype
-              { name: "777-111-1111", value: "home" }
-            ],
-            emails:[
-              // Some Collection or Zero or More Objects Fitting This Prototype
-              { name: "bne@aye.com", value:"gogo" },
-              { name: "bne2@aye2.com", value:"gadget" }
-            ]
-          }
-        ]
-      ]
+      contactSections: [],
+      pageStatus: {
+        waitingOnAPICall: false
+      },
     }
   },
   methods: {
-    getContacts() {
-
+    fetchContacts() {
+      this.pageStatus.waitingOnAPICall = true;
+      instance.get('api/contacts', {})
+      .then(async (response) => {
+        this.pageStatus.waitingOnAPICall = false;
+        this.$store.commit({type: 'loadContacts', amount: response.data.result})
+        this.contactSections = this.$store.getters.getContacts;
+      })
+      .catch((error) => {
+        this.pageStatus.waitingOnAPICall = false;
+        // TODO: Handle Errors
+        console.log(error);
+      });
     }
+  },
+  beforeMount() {
+    this.fetchContacts();
   }
 }
 </script>
