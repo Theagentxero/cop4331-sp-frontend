@@ -209,7 +209,6 @@ export default {
           console.log(error.response.data.errors);
           console.log(error.response.data.info);
         });
-      //alert(JSON.stringify(this.form));
     },
     checkPasswordRequirements() {
       var isEightOrLonger = /^(?=.{8,72})/;

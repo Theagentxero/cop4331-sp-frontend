@@ -1,144 +1,59 @@
-<template>
-  <b-container>
-    <hr style="border-top: 26px solid rgba(0, 0, 0, 15.1);">
-    <b-form>
-      <!-- First Row -->
-
-      <div v-for="phone, index in contact.phoneNumbers">
-        <b-row class="modal-phone-and-email" >
-          <b-col cols="6">
-            <b-form-group
-              :label="(index == 0) ? 'Phone Number: ' : ''"
-              label-for="phone-number-input"
-            >
-              <b-form-input
-                id="phone-number-input"
-                v-model="contact.phoneNumbers[index].value"
-                :disabled="notEditable"
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
-            <b-form-group id="input-group-1" label-for="input-1">
-              <b-form-select
-                id="input-1"
-                v-model="contact.phoneNumbers[index].name"
-                :options="typeOptions"
-                :disabled="notEditable"
-                required
-              ></b-form-select>
-            </b-form-group>
-          </b-col>
-          <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-            <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addPhoneNumber">+</b-button>
-          </b-col>
-        </b-row>
-      </div>
-      <!-- Second Row -->
-      <div v-for="email, index in contact.emails">
-        <b-row class="modal-phone-and-email" >
-          <b-col cols="6">
-            <b-form-group
-              :label="(index == 0) ? 'Email: ' : ''"
-              label-for="email-input"
-            >
-              <b-form-input
-                id="email-input"
-                v-model="contact.emails[index].value"
-                :disabled="notEditable"
-              ></b-form-input>
-            </b-form-group>
-          </b-col>
-          <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
-            <b-form-group id="input-group-2" label-for="input-2">
-              <b-form-select
-                id="input-2"
-                v-model="contact.emails[index].name"
-                :options="typeOptions"
-                :disabled="notEditable"
-                required
-              ></b-form-select>
-            </b-form-group>
-          </b-col>
-          <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-            <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addEmail">+</b-button>
-          </b-col>
-        </b-row>
-      </div>
-
-      <!-- Third Row -->
-      <b-row>
-        <b-col cols="6">
-          <b-form-group
-            id="input-group-3"
-            label="First Name:"
-            label-for="input-3">
-            <b-form-input
-              id="input-3"
-              v-model="contact.firstName"
-              placeholder="Enter First Name"
-              :disabled="notEditable"
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-row>
-
-      <!-- Fourth Row -->
-      <b-row>
-        <b-col cols="4">
-          <b-form-group
-            id="input-group-4"
-            label="Middle Name:"
-            label-for="input-4">
-            <b-form-input
-              id="input-4"
-              v-model="contact.middleName"
-              placeholder="Enter Middle Name"
-              :disabled="notEditable"
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-row>
-
-      <!-- Fifth Row -->
-      <b-row>
-        <b-col cols="2">
-          <b-form-group
-            id="input-group-5"
-            label="Last Name:"
-            label-for="input-5">
-            <b-form-input
-              id="input-5"
-              v-model="contact.lastName"
-              placeholder="Enter Last Name"
-              :disabled="notEditable"
-            ></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-row>
-
-      <!-- Sixth Row -->
-      <b-row>
-        <b-col>
-          <b-form-checkbox id="input-6" v-model="contact.favorite" :disabled="notEditable">Favorite Contact</b-form-checkbox>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col>
-          <b-button type="delete" variant="primary" v-on:click="deleteContact">Delete</b-button>
-          <b-button type="edit" variant="danger" v-if="notEditable" v-on:click="editComponent">Edit</b-button>
-          <b-button type="edit" variant="danger" v-else v-on:click="cancelEdit">Cancel</b-button>
-          <b-button type="ok" variant="secondary" v-if="notEditable" v-on:click="closeComponent">OK</b-button>
-          <b-button type="ok" variant="secondary" v-else v-on:click="updateContact">Save</b-button>
-        </b-col>
-      </b-row>
-    </b-form>
-    <b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ contact }}</pre>
-    </b-card>
-    <hr style="border-top: 26px solid rgba(0, 0, 0, 15.1);">
-  </b-container>
+<template lang="pug">
+b-container
+  hr(style='border-top: 26px solid rgba(0, 0, 0, 15.1);')
+  b-form
+    // First Name Row
+    b-row
+      b-col
+        b-form-group#input-group-3(label='First Name:', label-for='input-3')
+          b-form-input#input-3(v-model='contact.firstName', placeholder='Enter First Name', :disabled='notEditable')
+    // Middle Name Row
+    b-row
+      b-col
+        b-form-group#input-group-4(label='Middle Name:', label-for='input-4')
+          b-form-input#input-4(v-model='contact.middleName', placeholder='Enter Middle Name', :disabled='notEditable')
+    // Last Name Row
+    b-row
+      b-col
+        b-form-group#input-group-5(label='Last Name:', label-for='input-5')
+          b-form-input#input-5(v-model='contact.lastName', placeholder='Enter Last Name', :disabled='notEditable')
+    // Phone Number Row
+    div(v-for='phone, index in contact.phoneNumbers')
+      b-row.modal-phone-and-email
+        b-col(cols='6')
+          b-form-group(:label="(index == 0) ? 'Phone Number(s): ' : ''", label-for='phone-number-input')
+            b-form-input#phone-number-input(v-model='contact.phoneNumbers[index].value', :disabled='notEditable')
+        b-col(cols='5', :class="(index == 0) ? 'options-dropdown' : ''")
+          b-form-group#input-group-1(label-for='input-1')
+            b-form-select#input-1(v-model='contact.phoneNumbers[index].name', :options='typeOptions', :disabled='notEditable', required)
+        b-col(cols='1', :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'")
+          b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addPhoneNumber($event, index)' v-text='(contact.phoneNumbers.length-1) == index ? "+" : "-"')
+    // Email Row
+    div(v-for='email, index in contact.emails')
+      b-row.modal-phone-and-email
+        b-col(cols='6')
+          b-form-group(:label="(index == 0) ? 'Email(s): ' : ''", label-for='email-input')
+            b-form-input#email-input(v-model='contact.emails[index].value', :disabled='notEditable')
+        b-col(cols='5', :class="(index == 0) ? 'options-dropdown' : ''")
+          b-form-group#input-group-2(label-for='input-2')
+            b-form-select#input-2(v-model='contact.emails[index].name', :options='typeOptions', :disabled='notEditable', required)
+        b-col(cols='1', :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'")
+          b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addEmail' v-text='(contact.emails.length-1) == index ? "+" : "-"')
+    // Favorite Contact Row
+    b-row
+      b-col
+        b-form-checkbox#input-6(v-model='contact.favorite', :disabled='notEditable') Favorite Contact
+    b-row
+      b-col
+        b-button(type='delete', variant='primary', v-on:click='deleteContact') Delete
+        b-button(type='edit', variant='danger', v-if='notEditable', v-on:click='editComponent') Edit
+        b-button(type='edit', variant='danger', v-else='', v-on:click='cancelEdit') Cancel
+        b-button(type='ok', variant='secondary', v-if='notEditable', v-on:click='closeComponent') OK
+        b-button(type='ok', variant='secondary', v-else='', v-on:click='updateContact') Save
+  b-card.mt-3(header='Form Data Result')
+    pre.m-0.
+      {{ contact }}
+  hr(style='border-top: 26px solid rgba(0, 0, 0, 15.1);')
 </template>
 
 <script>
@@ -222,13 +137,16 @@ export default {
         console.log(error);
       });
     },
-    addPhoneNumber(event) {
+    addPhoneNumber(event, index) {
       event.preventDefault()
       if (this.notEditable) return
-      this.contact.phoneNumbers.push({
-        name: "Home",
-        value: ""
-      })
+      if ((this.contact.phoneNumbers.length-1) == index)
+        this.contact.phoneNumbers.push({
+          name: "Home",
+          value: ""
+        })
+      else
+        this.contact.phoneNumbers.splice(index, 1)
     },
     addEmail(event) {
       event.preventDefault()

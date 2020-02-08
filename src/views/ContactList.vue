@@ -11,46 +11,13 @@
 <script>
 import ContactItem from './ContactItem.vue'
 
-const _ = require('underscore');
-const axios = require('axios');
-
-const instance = axios.create({
-    timeout: 10000,
-    headers: {'Content-Type': 'application/json'},
-    withCredentials: true
-});
-
 export default {
   name: "ContactList",
   components: {
     ContactItem
   },
-  data() {
-    return {
-      contactSections: [],
-      pageStatus: {
-        waitingOnAPICall: false
-      },
-    }
-  },
-  methods: {
-    fetchContacts() {
-      this.pageStatus.waitingOnAPICall = true;
-      instance.get('api/contacts', {})
-      .then(async (response) => {
-        this.pageStatus.waitingOnAPICall = false;
-        this.$store.commit({type: 'loadContacts', amount: response.data.result})
-        this.contactSections = this.$store.getters.getContacts;
-      })
-      .catch((error) => {
-        this.pageStatus.waitingOnAPICall = false;
-        // TODO: Handle Errors
-        console.log(error);
-      });
-    }
-  },
-  beforeMount() {
-    this.fetchContacts();
+  props: {
+    contactSections: Array
   }
 }
 </script>

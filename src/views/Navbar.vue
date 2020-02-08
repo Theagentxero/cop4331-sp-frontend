@@ -1,43 +1,32 @@
-<template>
-  <b-navbar id="navbar" variant="our-orange" toggleable="lg">
-    <!-- Navbar Brand -->
-    <b-navbar-brand href="#">
-      <img id="brand-icon" src="../assets/anonymous_crab_orange.png">
-      Crabrr
-    </b-navbar-brand>
-
-    <!-- Navbar Toggle Button -->
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-    <!-- Collapsed Navbar Items -->
-    <b-collapse id="nav-collapse" is-nav>
-      <!-- Left Aligned Navbar Items -->
-      <b-navbar-nav>
-        <b-nav-item variant="our-orange" v-on:click="favoritesToggle">Favorite Crabs</b-nav-item>
-        <b-nav-item v-b-modal.add-contact-modal variant="our-orange">Add A Crab</b-nav-item>
-        <b-nav-item-dropdown>
-          <template v-slot:button-content>
-            <em>User</em>
-          </template>
-          <b-dropdown-item href="#">Edit Info</b-dropdown-item>
-          <b-dropdown-item href="#" v-on:click="signOut">Sign Out</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-      <!-- Right Aligned Navbar Items -->
-      <b-navbar-nav class="ml-auto">
-        <b-nav-form>
-          <b-form-input v-model="searchParams.search" id="search-field" size="lg" class="mr-sm-2" 
-                        :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'"></b-form-input>
-          <b-button size="md" class="my-2 my-sm-0" v-on:click="searchContacts">Search</b-button>
-        </b-nav-form>
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
+<template lang="pug">
+b-navbar#navbar(variant='our-orange', toggleable='lg')
+  // Navbar Brand
+  b-navbar-brand(href='#')
+    img#brand-icon(src='../assets/anonymous_crab_orange.png')
+  // Navbar Toggle Button
+  b-navbar-toggle(target='nav-collapse')
+  // Collapsed Navbar Items
+  b-collapse#nav-collapse(is-nav='')
+    // Left Aligned Navbar Items
+    b-navbar-nav
+      b-nav-item(variant='our-orange', v-on:click='favoritesToggle') Favorite Crabs
+      b-nav-item(v-b-modal.add-contact-modal='', variant='our-orange') Add A Crab
+      b-nav-item-dropdown
+        template(v-slot:button-content='')
+          em User
+        b-dropdown-item(href='#') Edit Info
+        b-dropdown-item(href='#', v-on:click='signOut') Sign Out
+    // Right Aligned Navbar Items
+    b-navbar-nav.ml-auto
+      b-nav-form(@submit.stop.prevent='searchContacts')
+        b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='lg', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
+        b-button.my-2.my-sm-0(type="submit", size='md') Search
 </template>
 
 <script>
 const _ = require('underscore');
 const axios = require('axios');
+const fetch = require('node-fetch');
 
 const instance = axios.create({
     timeout: 10000,
@@ -65,12 +54,11 @@ export default {
   methods: {
     searchContacts() {
       this.pageStatus.waitingOnAPICall = true;
-      instance.get('api/contacts/search', this.searchParams)
+      instance.post('api/contacts/search', this.searchParams)
       .then(async (response) => {
         this.pageStatus.waitingOnAPICall = false;
-        // this.$store.commit({type: 'searchedContacts', amount: response.data.result})
-        console.log(response.data)
-        // this.contactSections = this.$store.getters.getContacts;
+        this.$store.commit({type: 'loadContacts', amount: response.data.result})
+        this.$emit('searchContacts', response.data.result)
       })
       .catch((error) => {
         this.pageStatus.waitingOnAPICall = false;
@@ -90,18 +78,17 @@ export default {
             }
         }
         this.pageStatus.waitingOnAPICall = true;
-        instance.get('api/contacts/search', this.params)
+        instance.post('api/contacts/search', params)
         .then(async (response) => {
             this.pageStatus.waitingOnAPICall = false;
-            // this.$store.commit({type: 'searchedContacts', amount: response.data.result})
-            console.log(response.data)
-            // this.contactSections = this.$store.getters.getContacts;
+            this.$store.commit({type: 'loadContacts', amount: response.data.result})
         })
         .catch((error) => {
             this.pageStatus.waitingOnAPICall = false;
             // TODO: Handle Errors
             console.log(error);
         });
+        // emit this.contactSections = this.$store.getters.getContacts;
     },
     signOut(){
         // Clear Cookies

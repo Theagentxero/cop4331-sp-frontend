@@ -152,7 +152,6 @@ export default {
                 this.formWaiting = false;
                 // TODO: Handle Errors
             });
-            //alert(JSON.stringify(this.form));
         },
         onChange(value) {
             if(this.showIssueText){

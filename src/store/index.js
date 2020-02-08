@@ -63,6 +63,9 @@ export default new Vuex.Store({
         updateContact(state, payload) {
             var index = state.contacts.map((e) => e._id).indexOf(payload.amount._id)
             state.contacts[index] = payload.amount;
+        },
+        searchedContacts(state, payload) {
+            
         }
     },
     actions: {

@@ -1,18 +1,15 @@
-<template>
-  <b-col v-if="!selected" class="text-center" cols="6" sm="4" md="3" lg="2">
-    <b-button variant="our-orange" :pressed.sync="selected">
-      <img class="contact-icon mt-2" :src="'/img/contact/' + contact._id">
-    </b-button>
-    <h1 v-if="contact.firstName != ''">{{contact.firstName}}</h1>
-    <h1 v-else-if="contact.middleName != ''">{{contact.middleName}}</h1>
-    <h1 v-else-if="contact.lastName != ''">{{contact.lastName}}</h1>
-    <h1 v-else-if="contact.phoneNumbers.length != 0">{{contact.phoneNumbers[0].value}}</h1>
-    <h1 v-else-if="contact.emails.length != 0">{{contact.emails[0].value}}</h1>
-    <h1 v-else>No Info</h1>
-  </b-col>
-  <b-col v-else cols="12">
-    <EditContact @closeComponent="updateSelected" :initContact="contact" />
-  </b-col>
+<template lang="pug">
+b-col.text-center(v-if='!selected', cols='6', sm='4', md='3', lg='2')
+  b-button(variant='our-orange', :pressed.sync='selected')
+    img.contact-icon.mt-2(:src="'/img/contact/' + contact._id")
+  h1(v-if="contact.firstName != ''") {{contact.firstName}}
+  h1(v-else-if="contact.middleName != ''") {{contact.middleName}}
+  h1(v-else-if="contact.lastName != ''") {{contact.lastName}}
+  h1(v-else-if='contact.phoneNumbers.length != 0') {{contact.phoneNumbers[0].value}}
+  h1(v-else-if='contact.emails.length != 0') {{contact.emails[0].value}}
+  h1(v-else='') No Info
+b-col(v-else='', cols='12')
+  EditContact(@closeComponent='updateSelected', :initContact='contact')
 </template>
 
 <script>
@@ -35,8 +32,6 @@ export default {
   methods: {
     updateSelected() {
       this.selected = false;
-      console.log(this.initContact._id)
-      console.log('I get this: ' + this.$store.getters.getByID(this.initContact._id))
       this.contact = JSON.parse(JSON.stringify(this.$store.getters.getByID(this.initContact._id)))
     }
   }

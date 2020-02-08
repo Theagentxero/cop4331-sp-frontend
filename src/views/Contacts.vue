@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Navbar />
+    <Navbar @searchContacts='searchContacts'/>
     
     <AddContact />
 
-    <ContactList />
+    <ContactList :contactSections='contactSections'/>
   </div>
 </template>
 
@@ -13,12 +13,51 @@ import Navbar from './Navbar.vue';
 import AddContact from './AddContact.vue'
 import ContactList from './ContactList.vue'
 
+const _ = require('underscore');
+const axios = require('axios');
+
+const instance = axios.create({
+    timeout: 10000,
+    headers: {'Content-Type': 'application/json'},
+    withCredentials: true
+});
+
 export default {
   name: 'Contacts',
   components: {
     Navbar,
     AddContact,
     ContactList
+  },
+  data() {
+    return {
+      contactSections: [],
+      pageStatus: {
+        waitingOnAPICall: false
+      }
+    }
+  },
+  methods: {
+    fetchContacts() {
+      this.pageStatus.waitingOnAPICall = true;
+      instance.get('api/contacts', {})
+      .then(async (response) => {
+        this.pageStatus.waitingOnAPICall = false;
+        this.$store.commit({type: 'loadContacts', amount: response.data.result})
+        this.contactSections = this.$store.getters.getContacts
+      })
+      .catch((error) => {
+        this.pageStatus.waitingOnAPICall = false;
+        // TODO: Handle Errors
+        console.log(error);
+      });
+    },
+    searchContacts(payload) {
+      this.contactSections = payload
+    }
+  },
+  beforeMount() {
+    this.fetchContacts();
   }
 }
 </script>

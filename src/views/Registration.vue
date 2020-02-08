@@ -240,7 +240,6 @@ export default {
                 console.log(error.response.data.status);
                 console.log(error.response.data.info);
             });
-            //alert(JSON.stringify(this.form));
         }
     }
 }

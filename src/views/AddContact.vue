@@ -160,9 +160,6 @@ export default {
       this.createContact(payload)
       // Hide the modal manually
       this.$nextTick(() => {
-        // Access by reference
-        // this.$refs['add-contact-modal'].hide()
-
         // Acess by id
         this.$bvModal.hide("add-contact-modal");
       });
@@ -191,11 +188,9 @@ export default {
     },
     createContact(payload) {
       this.pageStatus.waitingOnAPICall = true;
-      console.log(payload)
       instance.post('api/contacts', payload)
       .then(async (response) => {
         this.pageStatus.waitingOnAPICall = false;
-        console.log()
         this.$store.commit({type: 'addContact', amount: response.data.result})
       })
       .catch((error) => {
