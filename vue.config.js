@@ -8,6 +8,12 @@ module.exports = {
         changeOrigin: true,
         secure: false
       }
+      '/img': {
+        target: 'http://img.crabrr.com',
+        pathRewrite: { '^/api': '' },
+        changeOrigin: true,
+        secure: false
+      }
     }
   },
   css: {

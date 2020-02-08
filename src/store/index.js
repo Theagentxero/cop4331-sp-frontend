@@ -38,6 +38,7 @@ export default new Vuex.Store({
                 first_name: null,
                 last_name: null
             };
+            state.contacts = [];
         },
         login(state, user) {
             state.Authenticated = true;

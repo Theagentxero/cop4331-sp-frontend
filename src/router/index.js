@@ -30,7 +30,8 @@ const routes = [
     name: 'login',
     component: SlideLogin,
     meta: {
-      requiresAuth: false
+      requiresAuth: false,
+      checkForAutoLogin: true
     }
   },
   {
@@ -75,7 +76,50 @@ const router = new VueRouter({
 })
 
 router.beforeEach( async (to, from, next) => {
-    //console.log("Checking Route");
+    // Checks if we can bypass login
+    if(to.meta.checkForAutoLogin){
+        instance.get('api/auth/checkAuth.json')
+            .then(async (response) => {
+                if(response.status == 200){
+                    //console.log("User Actually Has Auth")
+                    // Setup Store
+                    var userInfo = null;
+                    var seekCookie = "userinfo=";
+                    var allRawCookies = document.cookie;
+                    //console.log(allRawCookies);
+                    var decodedCookies = decodeURIComponent(allRawCookies);
+                    //console.log(decodedCookies);
+                    // Split Cookies
+                    var cookiesAry = decodedCookies.split(';');
+                    // Find The Correct Cookie
+                    var match = null;
+                    cookiesAry.forEach(raw => {
+                        var loc = raw.indexOf(seekCookie);
+                        if(loc != -1){
+                            // Found The Cookie With Our Name
+                            match = raw;
+                        }
+                    });
+                    if(match != null){
+                        var tmpVal = match.substring(seekCookie.length, match.length);
+                        userInfo = JSON.parse(tmpVal)
+                        store.commit('login', userInfo);
+                        if(store.getters.isAuthenticated){
+                            next('/contacts')
+                        }else{
+                            next('/');
+                        }
+                    }else{
+                        next('/');
+                    }
+                }else{
+                    next('/');
+                }
+            })
+            .catch((error) => {
+                next('/');
+            });
+    }
     // Check if the route requires authentication
     if(to.meta.requiresAuth) {
         //console.log("Route Requires Auth");

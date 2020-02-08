@@ -1,7 +1,7 @@
 <template>
   <b-col v-if="!selected" class="text-center" cols="6" sm="4" md="3" lg="2">
     <b-button variant="our-orange" :pressed.sync="selected">
-      <img class="contact-icon mt-2" src="../assets/anonymous_crab_orange.png">
+      <img class="contact-icon mt-2" :src="'/img/contact/' + contact._id">
     </b-button>
     <h1 v-if="contact.firstName != ''">{{contact.firstName}}</h1>
     <h1 v-else-if="contact.middleName != ''">{{contact.middleName}}</h1>

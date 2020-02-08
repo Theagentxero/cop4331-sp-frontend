@@ -20,7 +20,7 @@
             <em>User</em>
           </template>
           <b-dropdown-item href="#">Edit Info</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          <b-dropdown-item href="#" v-on:click="signOut">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
       <!-- Right Aligned Navbar Items -->
@@ -79,29 +79,55 @@ export default {
       });
     },
     favoritesToggle() {
-      // Toggle Favorites
-      this.searchParams.options.onlyFavorites = !this.searchParams.options.onlyFavorites;
-      // Clean Search
-      var params = {
-        search: "",
-        include: [],
-        options: {
-          onlyFavorites: this.searchParams.options.onlyFavorites
+        // Toggle Favorites
+        this.searchParams.options.onlyFavorites = !this.searchParams.options.onlyFavorites;
+        // Clean Search
+        var params = {
+            search: "",
+            include: [],
+            options: {
+                onlyFavorites: this.searchParams.options.onlyFavorites
+            }
         }
-      }
-      this.pageStatus.waitingOnAPICall = true;
-      instance.get('api/contacts/search', this.params)
-      .then(async (response) => {
-        this.pageStatus.waitingOnAPICall = false;
-        // this.$store.commit({type: 'searchedContacts', amount: response.data.result})
-        console.log(response.data)
-        // this.contactSections = this.$store.getters.getContacts;
-      })
-      .catch((error) => {
-        this.pageStatus.waitingOnAPICall = false;
-        // TODO: Handle Errors
-        console.log(error);
-      });
+        this.pageStatus.waitingOnAPICall = true;
+        instance.get('api/contacts/search', this.params)
+        .then(async (response) => {
+            this.pageStatus.waitingOnAPICall = false;
+            // this.$store.commit({type: 'searchedContacts', amount: response.data.result})
+            console.log(response.data)
+            // this.contactSections = this.$store.getters.getContacts;
+        })
+        .catch((error) => {
+            this.pageStatus.waitingOnAPICall = false;
+            // TODO: Handle Errors
+            console.log(error);
+        });
+    },
+    signOut(){
+        // Clear Cookies
+        instance.get('api/auth/logout.json')
+            .then(async (response) => {
+                if(response.status == 200){
+                    // Clear Vuex
+                    this.$store.commit('logout');
+                    // Reroute
+                    this.$router.push({path:"/"});
+                }else{
+                    console.log("Non 200 Returned Durring Logout")
+                    // Clear Vuex
+                    this.$store.commit('logout');
+                    // Reroute
+                    this.$router.push({path:"/"});
+                }
+            })
+            .catch((error) => {
+                console.log("Error Occured Durring Logout")
+                // Clear Vuex
+                this.$store.commit('logout');
+                // Reroute
+                this.$router.push({path:"/"});
+            });
+        
     }
   }
 }
