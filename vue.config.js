@@ -7,10 +7,10 @@ module.exports = {
         pathRewrite: { '^/api': '' },
         changeOrigin: true,
         secure: false
-      }
+      },
       '/img': {
         target: 'http://img.crabrr.com',
-        pathRewrite: { '^/api': '' },
+        pathRewrite: { '^/img': '' },
         changeOrigin: true,
         secure: false
       }
