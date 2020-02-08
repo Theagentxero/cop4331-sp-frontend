@@ -28,7 +28,11 @@ export default new Vuex.Store({
         },
         getContacts: state => {
             return state.contacts;
-        }
+        },
+        getByID: state => id => {
+            var index = state.contacts.map((e) => e._id).indexOf(id)
+            return state.contacts[index]
+        },
     },
     mutations: {
         logout(state) {
@@ -52,15 +56,12 @@ export default new Vuex.Store({
         },
         deleteContact(state, payload) {
             var index = state.contacts.map((e) => e._id).indexOf(payload.amount);
-
-            console.log(index)
-
             if (index > -1) {
                 state.contacts.splice(index, 1);
             }
         },
         updateContact(state, payload) {
-            var index = state.contacts.indexOf(payload.amount._id);
+            var index = state.contacts.map((e) => e._id).indexOf(payload.amount._id)
             state.contacts[index] = payload.amount;
         }
     },

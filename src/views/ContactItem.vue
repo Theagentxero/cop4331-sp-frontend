@@ -11,7 +11,7 @@
     <h1 v-else>No Info</h1>
   </b-col>
   <b-col v-else cols="12">
-    <EditContact @closeComponent="updateSelected" :contact="contact" />
+    <EditContact @closeComponent="updateSelected" :initContact="contact" />
   </b-col>
 </template>
 
@@ -23,17 +23,21 @@ export default {
   components: {
     EditContact
   },
+  props: {
+    initContact: Object
+  },
   data() {
     return {
-      selected: false
+      selected: false,
+      contact: JSON.parse(JSON.stringify(this.initContact))
     }
-  },
-  props: {
-    contact: Object
   },
   methods: {
     updateSelected() {
       this.selected = false;
+      console.log(this.initContact._id)
+      console.log('I get this: ' + this.$store.getters.getByID(this.initContact._id))
+      this.contact = JSON.parse(JSON.stringify(this.$store.getters.getByID(this.initContact._id)))
     }
   }
 }

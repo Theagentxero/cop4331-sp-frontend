@@ -56,7 +56,7 @@ const routes = [
     name: 'contacts',
     component: Contacts,
     meta: {
-      requiresAuth: false
+      requiresAuth: true
     }
   },
   {

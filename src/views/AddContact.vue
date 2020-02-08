@@ -195,7 +195,8 @@ export default {
       instance.post('api/contacts', payload)
       .then(async (response) => {
         this.pageStatus.waitingOnAPICall = false;
-        this.$store.commit({type: 'addContact', amount: payload})
+        console.log()
+        this.$store.commit({type: 'addContact', amount: response.data.result})
       })
       .catch((error) => {
         this.pageStatus.waitingOnAPICall = false;

@@ -2,7 +2,7 @@
   <div>
     <b-container class="contacts p-2">
       <b-row>
-        <ContactItem v-for="contact in contactSections" :key="contact._id" :contact="contact"/>
+        <ContactItem v-for="contact in contactSections" :key="contact._id" :initContact="contact"/>
       </b-row>
     </b-container>
   </div>

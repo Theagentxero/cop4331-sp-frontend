@@ -14,7 +14,7 @@
               <b-form-input
                 id="phone-number-input"
                 v-model="contact.phoneNumbers[index].value"
-                :disabled="myToggle"
+                :disabled="notEditable"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -24,7 +24,7 @@
                 id="input-1"
                 v-model="contact.phoneNumbers[index].name"
                 :options="typeOptions"
-                :disabled="myToggle"
+                :disabled="notEditable"
                 required
               ></b-form-select>
             </b-form-group>
@@ -45,7 +45,7 @@
               <b-form-input
                 id="email-input"
                 v-model="contact.emails[index].value"
-                :disabled="myToggle"
+                :disabled="notEditable"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -55,7 +55,7 @@
                 id="input-2"
                 v-model="contact.emails[index].name"
                 :options="typeOptions"
-                :disabled="myToggle"
+                :disabled="notEditable"
                 required
               ></b-form-select>
             </b-form-group>
@@ -77,7 +77,7 @@
               id="input-3"
               v-model="contact.firstName"
               placeholder="Enter First Name"
-              :disabled="myToggle"
+              :disabled="notEditable"
             ></b-form-input>
           </b-form-group>
         </b-col>
@@ -94,7 +94,7 @@
               id="input-4"
               v-model="contact.middleName"
               placeholder="Enter Middle Name"
-              :disabled="myToggle"
+              :disabled="notEditable"
             ></b-form-input>
           </b-form-group>
         </b-col>
@@ -111,7 +111,7 @@
               id="input-5"
               v-model="contact.lastName"
               placeholder="Enter Last Name"
-              :disabled="myToggle"
+              :disabled="notEditable"
             ></b-form-input>
           </b-form-group>
         </b-col>
@@ -120,16 +120,16 @@
       <!-- Sixth Row -->
       <b-row>
         <b-col>
-          <b-form-checkbox id="input-6" v-model="contact.favorite" :disabled="myToggle">Favorite Contact</b-form-checkbox>
+          <b-form-checkbox id="input-6" v-model="contact.favorite" :disabled="notEditable">Favorite Contact</b-form-checkbox>
         </b-col>
       </b-row>
 
       <b-row>
         <b-col>
           <b-button type="delete" variant="primary" v-on:click="deleteContact">Delete</b-button>
-          <b-button type="edit" variant="danger" v-if="myToggle" v-on:click="editComponent">Edit</b-button>
-          <b-button type="edit" variant="danger" v-else v-on:click="editComponent">Cancel</b-button>
-          <b-button type="ok" variant="secondary" v-if="myToggle" v-on:click="closeComponent">OK</b-button>
+          <b-button type="edit" variant="danger" v-if="notEditable" v-on:click="editComponent">Edit</b-button>
+          <b-button type="edit" variant="danger" v-else v-on:click="cancelEdit">Cancel</b-button>
+          <b-button type="ok" variant="secondary" v-if="notEditable" v-on:click="closeComponent">OK</b-button>
           <b-button type="ok" variant="secondary" v-else v-on:click="updateContact">Save</b-button>
         </b-col>
       </b-row>
@@ -154,21 +154,29 @@ const instance = axios.create({
 export default {
   name: "EditContact",
   props: {
-    contact: Object
+    initContact: Object
   },
   data() {
     return {
       typeOptions: ["Home", "Work", "Personal"],
-      myToggle: true,
+      notEditable: true,
       pageStatus: {
         waitingOnAPICall: false
-      }
+      },
+      contact: JSON.parse(JSON.stringify(this.initContact)),
+      unchangedContact: {}
     }
   },
   methods: {
     editComponent(event) {
       event.preventDefault()
-      this.myToggle = !this.myToggle
+      this.notEditable = false
+      this.contact = JSON.parse(JSON.stringify(this.unchangedContact))
+    },
+    cancelEdit(event) {
+      event.preventDefault()
+      this.notEditable = true
+      this.contact = JSON.parse(JSON.stringify(this.unchangedContact))
     },
     closeComponent(event) {
       event.preventDefault()
@@ -191,30 +199,55 @@ export default {
     },
     updateContact(event) {
       event.preventDefault()
-      this.pageStatus.waitingOnAPICall = true;
-      instance.put(`api/contacts/${this.contact._id}`, this.contact)
+      this.pageStatus.waitingOnAPICall = true
+      var payload = JSON.parse(JSON.stringify(this.contact))
+      payload.phoneNumbers = payload.phoneNumbers.filter(number => number.value != "");
+      payload.emails = payload.emails.filter(email => email.value != "");
+
+      instance.put(`api/contacts/${payload._id}`, payload)
       .then(async (response) => {
-        this.pageStatus.waitingOnAPICall = false;
-        this.$store.commit({type: 'updateContact', amount: this.contact})
+        this.pageStatus.waitingOnAPICall = false
+        this.$store.commit({type: 'updateContact', amount: payload})
+        this.contact = JSON.parse(JSON.stringify(payload))
+        if (this.contact.phoneNumbers.length == 0)
+          this.contact.phoneNumbers.push({name: "Home", value: ""})
+        if (this.contact.emails.length == 0)
+          this.contact.emails.push({name: "Home", value: ""})
+        this.unchangedContact = JSON.parse(JSON.stringify(this.contact))
+        this.notEditable = true
       })
       .catch((error) => {
         this.pageStatus.waitingOnAPICall = false;
         // TODO: Handle Errors
         console.log(error);
       });
-      this.$emit('closeComponent')
     },
-    addPhoneNumber() {
+    addPhoneNumber(event) {
+      event.preventDefault()
+      if (this.notEditable) return
       this.contact.phoneNumbers.push({
         name: "Home",
         value: ""
       })
     },
-    addEmail() {
+    addEmail(event) {
+      event.preventDefault()
+      if (this.notEditable) return
       this.contact.emails.push({
         name: "Home",
         value: ""
       })
+    },
+    ran() {
+      payload.phoneNumbers = payload.phoneNumbers.filter(number => number.value != "");
+      payload.emails = payload.emails.filter(email => email.value != "");
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return;
+      }
+      if (!this.isValidContact(payload)) {
+        return;
+      }
     }
   },
   beforeMount() {
@@ -222,6 +255,7 @@ export default {
       this.contact.phoneNumbers.push({name: "Home", value: ""})
     if (this.contact.emails.length == 0)
       this.contact.emails.push({name: "Home", value: ""})
+    this.unchangedContact = JSON.parse(JSON.stringify(this.contact))
   }
 }
 </script>
