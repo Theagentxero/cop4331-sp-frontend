@@ -1,87 +1,143 @@
 <template>
 <b-container>
-  <hr style="border-top: 26px solid rgba(0, 0, 0, 15.1);"/>
-  <b-form>
-    <!-- First Name Row-->
-    <b-row>
-      <b-col>
-        <b-form-group id="input-group-3" label="First Name:" label-for="input-3">
-          <b-form-input id="input-3" v-model="contact.firstName" placeholder="Enter First Name" :disabled="notEditable"></b-form-input>
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <!-- Middle Name Row-->
-    <b-row>
-      <b-col>
-        <b-form-group id="input-group-4" label="Middle Name:" label-for="input-4">
-          <b-form-input id="input-4" v-model="contact.middleName" placeholder="Enter Middle Name" :disabled="notEditable"></b-form-input>
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <!-- Last Name Row-->
-    <b-row>
-      <b-col>
-        <b-form-group id="input-group-5" label="Last Name:" label-for="input-5">
-          <b-form-input id="input-5" v-model="contact.lastName" placeholder="Enter Last Name" :disabled="notEditable"></b-form-input>
-        </b-form-group>
-      </b-col>
-    </b-row>
-    <!-- Phone Number Row-->
-    <div v-for="phone, index in contact.phoneNumbers">
-      <b-row class="modal-phone-and-email">
-        <b-col cols="6">
-          <b-form-group :label="(index == 0) ? 'Phone Number(s): ' : ''" label-for="phone-number-input">
-            <b-form-input id="phone-number-input" v-model="contact.phoneNumbers[index].value" :disabled="notEditable"></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
-          <b-form-group id="input-group-1" label-for="input-1">
-            <b-form-select id="input-1" v-model="contact.phoneNumbers[index].name" :options="typeOptions" :disabled="notEditable" required="required"></b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-          <b-button size="sm" squared="" variant="our-orange" v-on:click="addPhoneNumber($event, index)" v-text="(contact.phoneNumbers.length-1) == index ? &quot;+&quot; : &quot;-&quot;" class="add"></b-button>
-        </b-col>
-      </b-row>
-    </div>
-    <!-- Email Row-->
-    <div v-for="email, index in contact.emails">
-      <b-row class="modal-phone-and-email">
-        <b-col cols="6">
-          <b-form-group :label="(index == 0) ? 'Email(s): ' : ''" label-for="email-input">
-            <b-form-input id="email-input" v-model="contact.emails[index].value" :disabled="notEditable"></b-form-input>
-          </b-form-group>
-        </b-col>
-        <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
-          <b-form-group id="input-group-2" label-for="input-2">
-            <b-form-select id="input-2" v-model="contact.emails[index].name" :options="typeOptions" :disabled="notEditable" required="required"></b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-          <b-button size="sm" squared="" variant="our-orange" v-on:click="addEmail($event, index)" v-text="(contact.emails.length-1) == index ? &quot;+&quot; : &quot;-&quot;" class="add"></b-button>
-        </b-col>
-      </b-row>
-    </div>
-    <!-- Favorite Contact Row-->
-    <b-row>
-      <b-col>
-        <b-form-checkbox id="input-6" v-model="contact.favorite" :disabled="notEditable">Favorite Contact</b-form-checkbox>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-button type="delete" variant="primary" v-on:click="deleteContact">Delete</b-button>
-        <b-button type="edit" variant="danger" v-if="notEditable" v-on:click="editComponent">Edit</b-button>
-        <b-button type="edit" variant="danger" v-else="" v-on:click="cancelEdit">Cancel</b-button>
-        <b-button type="ok" variant="secondary" v-if="notEditable" v-on:click="closeComponent">OK</b-button>
-        <b-button type="ok" variant="secondary" v-else="" v-on:click="updateContact">Save</b-button>
-      </b-col>
-    </b-row>
-  </b-form>
-  <b-card header="Form Data Result" class="mt-3">
-    <pre class="m-0">{{ contact }}</pre>
-  </b-card>
-  <hr style="border-top: 26px solid rgba(0, 0, 0, 15.1);"/>
+
+              <h4>Kitty</h4>
+              <b-card class="img-fluid" img-src="https://placekitten.com/300/300" img-left>
+                <b-card-text>
+                  <b-row>
+                  <b-col>
+                    <b-form-group label-size="sm"
+                      id="input-group-1"
+                      label="Email Address:"
+                      label-for="input-1"
+                    >
+                      <b-form-input size="sm"
+                        id="input-1"
+                        v-model="contact.emails"
+                        type="email"
+                        placeholder="Enter email"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                </b-col>
+              </b-row>
+
+                <b-row>
+                  <b-col cols="9">
+                    <b-form-group label-size="sm"
+                      id="input-group-3"
+                      label="First Name:"
+                      label-for="input-3">
+                      <b-form-input size="sm"
+                        id="input-3"
+                        v-model="contact.firstName"
+                        placeholder="Enter First Name"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+
+                <!-- Fourth Row -->
+                <b-row>
+                  <b-col cols="9">
+                    <b-form-group label-size="sm"
+                      id="input-group-4"
+                      label="Middle Name:"
+                      label-for="input-4">
+                      <b-form-input size="sm"
+                        id="input-4"
+                        v-model="contact.middleName"
+                        placeholder="Enter Middle Name"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+
+                <b-row>
+                  <b-col cols="9">
+                    <b-form-group label-size="sm"
+                      id="input-group-4"
+                      label="Middle Name:"
+                      label-for="input-4">
+                      <b-form-input size="sm"
+                        id="input-4"
+                        v-model="contact.middleName"
+                        placeholder="Enter Middle Name"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+
+                <b-row>
+                  <b-col cols="9">
+                    <b-form-group label-size="sm"
+                      id="input-group-4"
+                      label="Middle Name:"
+                      label-for="input-4">
+                      <b-form-input size="sm"
+                        id="input-4"
+                        v-model="contact.middleName"
+                        placeholder="Enter Middle Name"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+
+                <b-row>
+                  <b-col cols="9">
+                    <b-form-group label-size="sm"
+                      id="input-group-4"
+                      label="Middle Name:"
+                      label-for="input-4">
+                      <b-form-input size="sm"
+                        id="input-4"
+                        v-model="contact.middleName"
+                        placeholder="Enter Middle Name"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+
+                <!-- Fifth Row -->
+                <b-row>
+                  <b-col cols="9">
+                    <b-form-group label-size="sm"
+                      id="input-group-5"
+                      label="Last Name:"
+                      label-for="input-5">
+                      <b-form-input size="sm"
+                        id="input-5"
+                        v-model="contact.lastName"
+                        placeholder="Enter Last Name"
+                        :disabled=true
+                      ></b-form-input>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+
+        </b-card-text>
+        <b-button type="edit" size="sm" variant="warning" class="buttons">Edit</b-button>
+        <b-button variant="warning" size="sm" class="buttons">Favorite</b-button>
+        <b-button v-b-modal.modal-sm type="delete"  size="sm" variant="danger" class="buttons">Delete</b-button>
+        <b-button type="ok" variant="warning" size="sm" class="buttons" v-on:click="closeFunction">OK</b-button>
+
+        <b-modal
+        id="modal-sm"
+        size="sm"
+        cancel-variant="our-orange"
+        cancel-title="Nevermind"
+        ok-variant="outline-danger"
+        ok-title="Yes">
+        Are you sure?
+        </b-modal>
+
+      </b-card>
+  </b-col>
 </b-container>
 </template>
 
@@ -211,6 +267,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.card{
+  background-color: #f69b28;
+}
+
+.contact-icon {
+  width: 50px;
+}
+
+.buttons {
+  margin-right: 7px;
+  background-color: white;
+  color: #b36b00;
+}
+
 .options-dropdown {
   margin-top: 32px;
 }
@@ -221,5 +292,19 @@ export default {
 .plus-button-xtra {
   margin-top: 4px;
   padding-left: 0px;
+}
+
+  .card{
+    background-color: #f69b28;
+  }
+
+  .contact-icon {
+    width: 50px;
+  }
+
+  .buttons {
+    margin-right: 7px;
+    background-color: white;
+    color: #b36b00;
 }
 </style>
