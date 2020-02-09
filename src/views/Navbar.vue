@@ -1,5 +1,5 @@
 <template lang="pug">
-b-navbar#navbar(variant='our-orange', toggleable='lg')
+b-navbar#navbar(variant='our-orange', toggleable='md')
   // Navbar Brand
   b-navbar-brand(href='#')
     img#brand-icon(src='../assets/anonymous_crab_orange.png')
@@ -126,7 +126,10 @@ export default {
   box-shadow: 0px 0px 5px 2px $warning-variant;
   color:black;
   #search-field {
-    width: 40vw;
+    width: 35vw;
+    @media (min-width: 960px) {
+      width: 40vw;
+    }
   }
 }
 

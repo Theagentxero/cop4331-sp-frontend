@@ -40,7 +40,7 @@
           </b-form-group>
         </b-col>
         <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-          <b-button size="sm" squared="" variant="our-orange" v-on:click="addPhoneNumber($event, index)" v-text="(contact.phoneNumbers.length-1) == index ? &quot;+&quot; : &quot;-&quot;" class="add"></b-button>
+          <b-button size="sm" squared="" variant="our-orange" v-on:click="addPhoneNumber($event, index)" v-text="(contact.phoneNumbers.length-1) == index ? '+' : '-'" class="add"></b-button>
         </b-col>
       </b-row>
     </div>
@@ -58,7 +58,7 @@
           </b-form-group>
         </b-col>
         <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-          <b-button size="sm" squared="" variant="our-orange" v-on:click="addEmail($event, index)" v-text="(contact.emails.length-1) == index ? &quot;+&quot; : &quot;-&quot;" class="add"></b-button>
+          <b-button size="sm" squared="" variant="our-orange" v-on:click="addEmail($event, index)" v-text="(contact.emails.length-1) == index ? '+' : '-'" class="add"></b-button>
         </b-col>
       </b-row>
     </div>

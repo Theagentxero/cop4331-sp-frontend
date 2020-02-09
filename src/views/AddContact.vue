@@ -47,7 +47,7 @@
             </b-form-group>
           </b-col>
           <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-            <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addPhoneNumber">+</b-button>
+            <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addPhoneNumber($event, index)" v-text="(addContactSubmitForm.phoneNumbers.length-1) == index ? '+' : '-'"></b-button>
           </b-col>
         </b-row>
       </div>
@@ -69,7 +69,7 @@
             </b-form-group>
           </b-col>
           <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-            <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addEmail">+</b-button>
+            <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addEmail($event, index)" v-text="(addContactSubmitForm.emails.length-1) == index ? '+' : '-'"></b-button>
           </b-col>
         </b-row>
       </div>
@@ -164,17 +164,25 @@ export default {
         this.$bvModal.hide("add-contact-modal");
       });
     },
-    addPhoneNumber() {
-      this.addContactSubmitForm.phoneNumbers.push({
-        name: "Home",
-        value: ""
-      })
+    addPhoneNumber(event, index) {
+      event.preventDefault()
+      if ((this.addContactSubmitForm.phoneNumbers.length-1) == index)
+        this.addContactSubmitForm.phoneNumbers.push({
+          name: "Home",
+          value: ""
+        })
+      else
+        this.addContactSubmitForm.phoneNumbers.splice(index, 1)
     },
-    addEmail() {
-      this.addContactSubmitForm.emails.push({
-        name: "Home",
-        value: ""
-      })
+    addEmail(event, index) {
+      event.preventDefault()
+      if ((this.addContactSubmitForm.emails.length-1) == index)
+        this.addContactSubmitForm.emails.push({
+          name: "Home",
+          value: ""
+        })
+      else
+        this.addContactSubmitForm.emails.splice(index, 1)
     },
     isValidContact(payload) {
       if (payload.firstName == '' &&
