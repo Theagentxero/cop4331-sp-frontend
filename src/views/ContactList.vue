@@ -1,11 +1,11 @@
 <template>
-  <div>
+<div>
     <b-container class="contacts p-2">
-      <b-row>
+        <b-row>
         <ContactItem v-for="contact in contactSections" :key="contact._id" :initContact="contact"/>
-      </b-row>
+        </b-row>
     </b-container>
-  </div>
+</div>
 </template>
 
 <script>

@@ -1,26 +1,27 @@
 <template lang="pug">
-b-navbar#navbar(variant='our-orange', toggleable='md')
-  // Navbar Brand
-  b-navbar-brand(href='#')
-    img#brand-icon(src='../assets/anonymous_crab_orange.png')
-  // Navbar Toggle Button
-  b-navbar-toggle(target='nav-collapse')
-  // Collapsed Navbar Items
-  b-collapse#nav-collapse(is-nav='')
-    // Left Aligned Navbar Items
-    b-navbar-nav
-      b-nav-item(variant='our-orange', v-on:click='favoritesToggle') Favorite Crabs
-      b-nav-item(v-b-modal.add-contact-modal='', variant='our-orange') Add A Crab
-      b-nav-item-dropdown
-        template(v-slot:button-content='')
-          em User
-        b-dropdown-item(href='#') Edit Info
-        b-dropdown-item(href='#', v-on:click='signOut') Sign Out
-    // Right Aligned Navbar Items
-    b-navbar-nav.ml-auto
-      b-nav-form(@submit.stop.prevent='searchContacts')
-        b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='lg', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
-        b-button.my-2.my-sm-0(type="submit", size='md') Search
+    b-navbar#navbar(variant='our-orange', toggleable='md')
+        // Navbar Brand
+        b-navbar-brand(href='#')
+            img#brand-icon(src='../assets/anonymous_crab_orange.png')
+        // Navbar Toggle Button
+        b-navbar-toggle(target='nav-collapse')
+        // Collapsed Navbar Items
+        b-collapse#nav-collapse(is-nav='')
+            // Left Aligned Navbar Items
+            b-navbar-nav
+                b-nav-item(variant='our-orange', v-on:click='favoritesToggle') Favorite Crabs
+                b-nav-item(v-b-modal.add-contact-modal='', variant='our-orange') Add A Crab
+                // Navbar User Dropdown
+                b-nav-item-dropdown
+                    template(v-slot:button-content='')
+                        em User
+                    b-dropdown-item(href='#') Edit Info
+                    b-dropdown-item(href='#', v-on:click='signOut') Sign Out
+            // Right Aligned Navbar Items
+            b-navbar-nav.ml-auto
+                b-nav-form(@submit.stop.prevent='searchContacts')
+                    b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='lg', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
+                    b-button.my-2.my-sm-0(type="submit", size='md') Search
 </template>
 
 <script>

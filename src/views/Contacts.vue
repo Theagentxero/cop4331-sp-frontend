@@ -4,17 +4,26 @@
     
     <AddContact />
 
-    <ContactList :contactSections='contactSections'/>
+    <!-- <ContactList :contactSections='contactSections'/> -->
+    <div>
+        <b-container class="contacts p-2">
+            <b-row>
+                <contact-item @deleted="delUpdate" v-for="contact in allContacts" :key="contact.localID" :initContact="contact"/>
+            </b-row>
+        </b-container>
+    </div>
   </div>
 </template>
 
 <script>
 import Navbar from './Navbar.vue';
 import AddContact from './AddContact.vue'
-import ContactList from './ContactList.vue'
+//import ContactList from './ContactList.vue'
+import ContactItem from './ContactItem.vue'
 
 const _ = require('underscore');
 const axios = require('axios');
+const {Contact} = require('../lib/contactHandler.js');
 
 const instance = axios.create({
     timeout: 10000,
@@ -25,9 +34,10 @@ const instance = axios.create({
 export default {
   name: 'Contacts',
   components: {
+      'contact-item': ContactItem,
     Navbar,
     AddContact,
-    ContactList
+    //ContactList
   },
   data() {
     return {
@@ -37,26 +47,39 @@ export default {
       }
     }
   },
+  computed:{
+      allContacts(){
+          return this.$store.getters.getContacts;
+      }
+  },
   methods: {
     fetchContacts() {
-      this.pageStatus.waitingOnAPICall = true;
-      instance.get('api/contacts', {})
-      .then(async (response) => {
-        this.pageStatus.waitingOnAPICall = false;
-        this.$store.commit({type: 'loadContacts', amount: response.data.result})
-        this.contactSections = this.$store.getters.getContacts
-      })
-      .catch((error) => {
-        this.pageStatus.waitingOnAPICall = false;
-        // TODO: Handle Errors
-        console.log(error);
-      });
+        this.pageStatus.waitingOnAPICall = true;
+        instance.get('api/contacts')
+            .then(async (response) => {
+                this.pageStatus.waitingOnAPICall = false;
+                this.$store.commit('loadContacts', {contacts: response.data.result});
+                //this.$store.commit({type: 'loadContacts', amount: response.data.result})
+                this.contactSections = this.$store.getters.getContacts
+                console.log(this.contactSections);
+                console.log("Fetch Contacts Completed")
+            })
+            .catch((error) => {
+                this.pageStatus.waitingOnAPICall = false;
+                // TODO: Handle Errors
+                console.log(error);
+            });
     },
     searchContacts(payload) {
-      this.contactSections = payload
+        this.contactSections = payload
+    },
+    delUpdate(){
+        console.log("Performing Update")
+        this.contactSections = this.$store.getters.getContacts;
     }
   },
   beforeMount() {
+
     this.fetchContacts();
   }
 }

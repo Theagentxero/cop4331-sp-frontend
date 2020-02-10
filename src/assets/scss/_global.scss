@@ -4,6 +4,12 @@ $warning-variant: #f69b29;
     background-color: $warning-variant !important;
 }
 
+
 .btn-our-orange {
     background-color: $warning-variant !important;
+}
+
+.btn-our-orange-invert {
+    color: $warning-variant !important;
+    background-color: black !important;
 }
