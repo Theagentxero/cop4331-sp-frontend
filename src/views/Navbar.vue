@@ -19,8 +19,8 @@ b-navbar#navbar(variant='our-orange', toggleable='lg')
     // Right Aligned Navbar Items
     b-navbar-nav.ml-auto
       b-nav-form(@submit.stop.prevent='searchContacts')
-        b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='lg', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
-        b-button.my-2.my-sm-0(type="submit", size='md') Search
+        b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='sm', :placeholder="(searchParams.options.onlyFavorites) ? 'Search crabbie...' : 'Search favorite crabbies...'")
+        b-button.my-2.my-sm-0(type="submit", size='sm', variant='warning') Search
 </template>
 
 <script>
@@ -114,7 +114,7 @@ export default {
                 // Reroute
                 this.$router.push({path:"/"});
             });
-        
+
     }
   }
 }
@@ -125,8 +125,15 @@ export default {
   background: $warning-variant;
   box-shadow: 0px 0px 5px 2px $warning-variant;
   color:black;
+
+  .form-control:focus {
+    border-color: orange;
+    box-shadow: 0px 0px 4px rgba(243, 156, 18, 1)
+    inset, 1.5px 1.5px 2px rgba(232, 126, 4, 1);
+    }
+
   #search-field {
-    width: 40vw;
+    width: 20vw;
   }
 }
 
