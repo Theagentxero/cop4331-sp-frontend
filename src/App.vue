@@ -4,11 +4,15 @@
   </div>
 </template>
 
+
 <style lang="scss">
+html{
+  background: #242424;
+}
 #app {
+  background: #242424;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
 }
 </style>
