@@ -1,329 +1,96 @@
-<template>
-    <b-container>
-        <b-row>
-            <b-col cols="4">
-                <b-row>
-                    <b-col>
-                        <img :src="'/img/contact/' + contact.id" class="contact-icon"/>
-                    </b-col>
-                </b-row>
-                <b-row v-if="editing">
-                    <b-col>
-                        <!-- Upload Image Here -->
-                        <form id="imageUploadForm">
-                           <input type="file" id="contactimg" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp">
-                        </form>
-                    </b-col>
-                </b-row>
-            </b-col>
-            <b-col cols="8" @ondblclick="startEdit()">
-                <!-- Name Row -->
-                <b-row>
-                    <b-col v-if="!editing">
-                        <h3>Name: {{contact.formattedName()}}</h3>
-                    </b-col>
-                    <b-col v-else>
-                        <b-form>
-                            <b-row>
-                                <b-col cols="2">
-                                    <h3>Name:</h3>
-                                </b-col>
-                                <b-col>
-                                    <b-form-group
-                                        id="first-name-group"
-                                        description="First Name"
-                                        label-for="input-first-name"
-                                    >
-                                        <b-form-input 
-                                            id="input-first-name" 
-                                            v-model="contact.firstName"
-                                        ></b-form-input>
-                                    </b-form-group>
-                                </b-col>
-                                <b-col>
-                                    <b-form-group
-                                        id="middle-name-group"
-                                        description="Middle Name"
-                                        label-for="input-middle-name"
-                                    >
-                                        <b-form-input 
-                                            id="input-middle-name" 
-                                            v-model="contact.middleName"
-                                        ></b-form-input>
-                                    </b-form-group>
-                                </b-col>
-                                <b-col>
-                                    <b-form-group
-                                        id="last-name-group"
-                                        description="Last Name"
-                                        label-for="input-last-name"
-                                    >
-                                        <b-form-input 
-                                            id="input-last-name" 
-                                            v-model="contact.lastName"
-                                        ></b-form-input>
-                                    </b-form-group>
-                                </b-col>  
-                            </b-row>
-                        </b-form>
-                    </b-col>
-                </b-row>
-                <b-row>
-                    <b-col>
-                        <b-row>
-                            <b-col>
-                                <h3>Contact Info:</h3>
-                            </b-col>
-                        </b-row>
-                        <!-- Phone Numbers Rows -->
-                        <b-row>
-                            <b-col cols="1">
-                                <!-- Blank -->
-                            </b-col>
-                            <b-col cols="11">
-                                <h4>Phone:</h4>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col v-if="!editing">
-                                <b-row v-for="(phone, index) in contact.phoneNumbers" :key="index">
-                                    <!-- Phone Number Name -->
-                                    <b-col cols="2">
-                                        <!-- Intentionally Blank -->
-                                    </b-col>
-                                    <b-col cols="2">
-                                        <h4>{{phone.name}}</h4>
-                                    </b-col>
-                                    <b-col cols="8">
-                                        <h4>{{phone.value}}</h4>
-                                    </b-col>
-                                </b-row>
-                            </b-col>
-                            <b-col v-else>
-                                <b-row v-for="(phone, index) in contact.phoneNumbers" :key="index">
-                                    <!-- Phone Number Name -->
-                                    <b-col cols="2">
-                                        <!-- Intentionally Blank -->
-                                    </b-col>
-                                    <b-col cols="2">
-                                        <b-form-group
-                                            :id="'group-phone-name-' + index"
-                                            description="Name"
-                                            :label-for="'input-phone-name-' + index"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-phone-name-' + index"
-                                                type="text"
-                                                v-model="phone.name"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col cols="7">
-                                        <b-form-group
-                                            :id="'group-phone-value-' + index"
-                                            description="Phone Number"
-                                            :label-for="'input-phone-value-' + index"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-phone-value-' + index" 
-                                                v-model="phone.value"
-                                                :formatter="phoneFormat"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col>
-                                        <b-button 
-                                            class="add" 
-                                            size="sm" 
-                                            squared 
-                                            variant="our-orange-invert" 
-                                            v-on:click="removePhone($event, phone)" 
-                                            v-text="'-'"
-                                        ></b-button>
-                                    </b-col>
-                                </b-row>
-                                <b-row>
-                                    <!-- Phone Number Name -->
-                                    <b-col cols="2">
-                                        <!-- Intentionally Blank -->
-                                    </b-col>
-                                    <b-col cols="2">
-                                        <b-form-group
-                                            :id="'group-phone-name-new'"
-                                            description="Name"
-                                            :label-for="'input-phone-name-new'"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-phone-name-new'"
-                                                placeholder="Add Phone Number" 
-                                                type="text"
-                                                v-model="newPhone.name"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col cols="7">
-                                        <b-form-group
-                                            :id="'group-phone-value-new'"
-                                            description="New Phone Number"
-                                            :label-for="'input-phone-value-new'"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-phone-value-new'"
-                                                placeholder="Add Phone Number" 
-                                                v-model="newPhone.value"
-                                                :formatter="phoneFormat"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col>
-                                        <b-button 
-                                            class="add" 
-                                            size="sm" 
-                                            squared 
-                                            variant="our-orange-invert" 
-                                            v-on:click="addPhone($event)" 
-                                            v-text="'+'"
-                                        ></b-button>
-                                    </b-col>
-                                </b-row>
-                            </b-col>
-                        </b-row>
-                        
-                        <!-- Email Rows -->
-                        <b-row>
-                            <b-col cols="1">
-                                <!-- Blank -->
-                            </b-col>
-                            <b-col cols="11">
-                                <h4>Email:</h4>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            
-                        </b-row>
-                            <b-col v-if="!editing">
-                                <!-- Email Row -->
-                                <b-row v-for="(email, index) in contact.emails" :key="index">
-                                    <!-- Phone Number Name -->
-                                    <b-col cols="2">
-                                        <!-- Intentionally Blank -->
-                                    </b-col>
-                                    <b-col cols="2">
-                                        <h4>{{email.name}}</h4>
-                                    </b-col>
-                                    <b-col cols="8">
-                                        <h4>{{email.value}}</h4>
-                                    </b-col>
-                                </b-row>
-                            </b-col>
-                            <b-col v-else>
-                                <b-row v-for="(email, index) in contact.emails" :key="index">
-                                    <!-- Phone Number Name -->
-                                    <b-col cols="2">
-                                        <!-- Intentionally Blank -->
-                                    </b-col>
-                                    <b-col cols="2">
-                                        <b-form-group
-                                            :id="'group-email-name-' + index"
-                                            description="Name"
-                                            :label-for="'input-phone-name-' + index"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-email-name-' + index"
-                                                type="text"
-                                                v-model="email.name"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col cols="7">
-                                        <b-form-group
-                                            :id="'group-email-value-' + index"
-                                            description="Phone Number"
-                                            :label-for="'input-phone-value-' + index"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-email-value-' + index" 
-                                                v-model="email.value"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col>
-                                        <b-button 
-                                            class="add" 
-                                            size="sm" 
-                                            squared 
-                                            variant="our-orange-invert" 
-                                            v-on:click="removeEmail($event, email)" 
-                                            v-text="'-'"
-                                        ></b-button>
-                                    </b-col>
-                                </b-row>
-                                <b-row>
-                                    <!-- Phone Number Name -->
-                                    <b-col cols="2">
-                                        <!-- Intentionally Blank -->
-                                    </b-col>
-                                    <b-col cols="2">
-                                        <b-form-group
-                                            :id="'group-email-name-new'"
-                                            description="Name"
-                                            :label-for="'input-email-name-new'"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-email-name-new'"
-                                                placeholder="New Email" 
-                                                type="text"
-                                                v-model="newEmail.name"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col cols="7">
-                                        <b-form-group
-                                            :id="'group-email-value-new'"
-                                            description="New Email"
-                                            :label-for="'input-email-value-new'"
-                                        >
-                                            <b-form-input 
-                                                :id="'input-email-value-new'"
-                                                placeholder="New Email" 
-                                                v-model="newEmail.value"
-                                            ></b-form-input>
-                                        </b-form-group>
-                                    </b-col>
-                                    <b-col>
-                                        <b-button 
-                                            class="add" 
-                                            size="sm" 
-                                            squared 
-                                            variant="our-orange-invert" 
-                                            v-on:click="addEmail($event)" 
-                                            v-text="'+'"
-                                        ></b-button>
-                                    </b-col>
-                                </b-row>
-                            </b-col>
-                    </b-col>
-                    
-                </b-row>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col cols="10">
-
-            </b-col>
-            <b-col cols="2">
-                <b-button-group>
-                    <b-button v-if="pageStatus.waitingOnAPICall"><div class="loader"></div></b-button>
-                    <b-button v-if="!pageStatus.waitingOnAPICall" variant="danger" @click="deleteContact()">Delete</b-button>
-                    <b-button v-if="!pageStatus.waitingOnAPICall" variant="info" @click="startEdit()">{{editButtonValue}}</b-button>
-                    <b-button v-if="!pageStatus.waitingOnAPICall" variant="warning" @click="close()" >{{closeButtonValue}}</b-button>
-                </b-button-group>
-            </b-col>
-        </b-row>
-        
-    </b-container>
+<template lang="pug">
+b-container
+  b-row
+    b-col
+      h3 Contact Info:
+  b-row.reducePaddingNotMarin
+    b-col(cols='3')
+      b-row
+        img.contact-icon(:src="'/img/contact/' + contact.id")
+      b-row(v-if='editing')
+        b-col
+          form#imageUploadForm
+            input#contactimg(type='file', name='contactimg', accept='image/png, image/jpeg, image/gif, image/tiff, image/bmp')
+      b-row.text-center
+        b-col.removePadding(cols='12', lg='4')
+          b-button.buttons.mb-1(v-b-modal.modal-sm, type='delete', size='sm', variant='danger', v-on:click='deleteContact') Delete
+        b-col.removePadding(cols='12', lg='4')
+          b-button.buttons.mb-1(variant='our-orange', size='sm', v-on:click='startEdit') {{editButtonValue}}
+        b-col.removePadding(cols='12', lg='4')
+          b-button.buttons.mb-1(variant='our-orange', size='sm', v-if='notEditable', v-on:click='close') {{closeButtonValue}}
+    b-col(cols='9', @ondblclick='startEdit()')
+      //- Name Row
+      b-row
+        b-col(v-if='!editing')
+          h3 Name: {{contact.formattedName()}}
+        div(v-else)
+          b-col(cols='12', md='6', lg='4')
+            b-form-group#input-group-3(label-size='sm', label='First Name:', label-for='input-3')
+              b-form-input#input-3.form-control(size='sm', v-model='contact.firstName', placeholder='Enter First Name', :disabled='notEditable')
+          b-col(cols='12', md='6', lg='4')
+            b-form-group#input-group-4(label-size='sm', label='Middle Name:', label-for='input-4')
+              b-form-input#input-4(size='sm', v-model='contact.middleName', placeholder='Enter Middle Name', :disabled='notEditable')
+          b-col(cols='12', md='12', lg='4')
+            b-form-group#input-group-5(label-size='sm', label='Last Name:', label-for='input-5')
+              b-form-input#input-5(size='sm', v-model='contact.lastName', placeholder='Enter Last Name', :disabled='notEditable')
+      //- Phone Numbers Display
+      div(v-if='!editing')
+        b-row
+          b-col(cols='1')
+            //- Blank
+          b-col(cols='11')
+            h4 Phone:
+        b-row(v-for='(phone, index) in contact.phoneNumbers', :key='index')
+          //- Phone Number Name
+          b-col(cols='2')
+          //- Intentionally Blank
+          b-col(cols='2')
+            h4 {{phone.name}}
+          b-col(cols='8')
+            h4 {{phone.value}}
+      //- Phone Numbers Edit
+      div(v-else, v-for='email, index in contact.emails')
+        b-row.modal-phone-and-email
+          b-col(cols='5', sm='6', md='7')
+            b-form-group(:label="(index == 0) ? 'Email(s): ' : ''", label-for='email-input')
+              b-form-input#email-input(size='sm', v-model='email.value', :disabled='notEditable')
+          b-col.dropDown(cols='5', :class="(index == 0) ? 'options-dropdown' : ''")
+            b-row
+              b-col(cols='11')
+                b-form-group#input-group-2(label-for='input-2')
+                  b-form-select#input-2.form-control(size='sm', v-model='email.name', :options='typeOptions', required='required')
+              b-col.removePadding(cols='1')
+                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addEmail($event, index, email)', v-text="(contact.emails.length-1) == index ? '+' : '-'")
+      //- Emails Display
+      div(v-if='!editing')
+        b-row
+          b-col(cols='1')
+              //- Blank
+          b-col(cols='11')
+              h4 Email:
+        b-row(v-for='(email, index) in contact.emails', :key='index')
+          //- Phone Number Name
+          b-col(cols='2')
+          //- Intentionally Blank
+          b-col(cols='2')
+            h4 {{email.name}}
+          b-col(cols='8')
+            h4 {{email.value}}
+      //- Emails Edit
+      div(v-for='phone, index in contact.phoneNumbers')
+        b-row.modal-phone-and-email
+          b-col(cols='5', sm='6', md='7')
+            b-form-group(:label="(index == 0) ? 'Phone Number(s): ' : ''", label-for='phone-number-input')
+              b-form-input#phone-number-input(size='sm', v-model='phone.value', :formatter='phoneFormat')
+          b-col.dropDown(cols='5', :class="(index == 0) ? 'options-dropdown phone-dropdown' : ''")
+            b-row
+              b-col(cols='11')
+                b-form-group#input-group-1(label-for='input-1')
+                  b-form-select#input-1.form-control(size='sm', v-model='phone.name', :options='typeOptions', required='required')
+              b-col.removePadding(cols='1')
+                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addPhoneNumber($event, index, phone)', v-text="(contact.phoneNumbers.length-1) == index ? '+' : '-'")
+      b-modal#modal-sm(size='sm', cancel-variant='our-orange', cancel-title='Nevermind', ok-variant='danger', ok-title='Yes') Are you sure?
 </template>
-
 <script>
 const _ = require('underscore');
 const axios = require('axios');
@@ -402,12 +169,12 @@ export default {
         phoneFormat(input){
             return phoneNumberLib.format(input);
         },
-        addPhone(event){
-            this.contact.addPhoneNumber(this.newPhone);
-            this.newPhone = {
-                name: "",
-                value: "",
-            };
+        addPhone(event, index, phone){
+          this.contact.addPhoneNumber(this.newPhone);
+          this.newPhone = {
+            name: "Home",
+            value: "",
+          };
         },
         addEmail(event){
             this.contact.addEmail(this.newEmail);
