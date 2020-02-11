@@ -31,6 +31,12 @@ class Contact{
         }else{
             this.lastName = "";
         }
+        // Safely Get Favorite
+        if(_.has(cont, "favorite") && cont.favorite != null){
+            this.favorite = cont.favorite;
+        }else{
+            this.favorite = false;
+        }
         this.phoneNumbers = [];
         if(_.has(cont, "phoneNumbers") && cont.phoneNumbers != null){
             cont.phoneNumbers.forEach(phoneNum => {
@@ -52,6 +58,7 @@ class Contact{
     }
     dbPrep(){
         var x = {
+            favorite: this.favorite,
             phoneNumbers: [],
             emails: []
         };

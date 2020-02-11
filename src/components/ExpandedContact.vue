@@ -1,16 +1,19 @@
 <template lang="pug">
 b-container
-  h4(v-model='contact.firstName') Kitty
+  img.img-fluid(src="../assets/star.png" class="favorite" v-if="contact.favorite")
+  h4 {{contact.formattedName()}}
   b-row.reducePaddingNotMarin
     b-col(cols='3')
       b-row
-        img.img-fluid(src='https://placekitten.com/300/300')
+        img.img-fluid( :id="'contact-img-' + contact.id" :src="'/img/contact/' + contact.id")
+        form(:id="'imageUploadForm-' + contact.id" style="display:none")
+          input(type="file" :id="'contactimg-' + contact.id" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp" style="display:none")
       b-row.text-center
         b-col.removePadding(cols='12', lg='4')
           b-button.buttons.mb-1(type='edit', size='sm', variant='our-orange', v-if='notEditable', v-on:click='editComponent') Edit
           b-button.buttons.mb-1(variant='our-orange', size='sm', v-else='', v-on:click='updateContact') Save
         b-col.removePadding(cols='12', lg='4')
-          b-button.buttons.mb-1(variant='our-orange', size='sm', v-model='contact.favorite', v-if='notEditable') Favorite
+          b-button.buttons.mb-1(variant='our-orange', size='sm', v-model='contact.favorite', v-if='notEditable' v-on:click="favoriteContact") Favorite
           b-button.buttons.mb-1(v-b-modal.modal-sm='', type='delete', size='sm', variant='danger', v-else='', v-on:click='deleteContact') Delete
         b-col.removePadding(cols='12', lg='4')
           b-button.buttons.mb-1(type='ok', variant='our-orange', size='sm', v-if='notEditable', v-on:click='closeComponent') OK
@@ -37,19 +40,19 @@ b-container
                 b-form-group#input-group-2(label-for='input-2')
                   b-form-select#input-2.form-control(size='sm', v-model='contact.emails[index].name', :options='typeOptions', :disabled='notEditable', required='required')
               b-col.removePadding(cols='1')
-                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addEmail($event, index)', v-text="(contact.emails.length-1) == index ? '+' : '-'")
+                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addEmail($event)', v-text="(contact.emails.length-1) == index ? '+' : '-'")
       div(v-for='phone, index in contact.phoneNumbers')
         b-row.modal-phone-and-email
           b-col(cols='5', sm='6', md='7')
             b-form-group(:label="(index == 0) ? 'Phone Number(s): ' : ''", label-for='phone-number-input')
-              b-form-input#phone-number-input(size='sm', v-model='contact.phoneNumbers[index].value', :disabled='notEditable')
+              b-form-input#phone-number-input(size='sm', v-model='contact.phoneNumbers[index].value', :formatter="phoneFormat", :disabled='notEditable')
           b-col.dropDown(cols='5', :class="(index == 0) ? 'options-dropdown phone-dropdown' : ''")
             b-row
               b-col(cols='11')
                 b-form-group#input-group-1(label-for='input-1')
                   b-form-select#input-1.form-control(size='sm', v-model='contact.phoneNumbers[index].name', :options='typeOptions', :disabled='notEditable', required='required')
               b-col.removePadding(cols='1')
-                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addPhoneNumber($event, index)', v-text="(contact.phoneNumbers.length-1) == index ? '+' : '-'")
+                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addPhone($event)', v-text="(contact.phoneNumbers.length-1) == index ? '+' : '-'")
 </template>
 
 <script>
@@ -102,12 +105,15 @@ export default {
         editComponent(event) {
             event.preventDefault();
             this.notEditable = false;
-            this.contact = JSON.parse(JSON.stringify(this.unchangedContact));
+            this.contact = new Contact(this.originalContact);
+            this.contact.addPhoneNumber({});
+            this.contact.addEmail({});
         },
         cancelEdit(event) {
             event.preventDefault();
             this.notEditable = true;
-            this.contact = JSON.parse(JSON.stringify(this.unchangedContact));
+            this.contact = new Contact(this.originalContact);
+            document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', '/img/contact/' + this.contact.id);
         },
         closeComponent(event) {
             event.preventDefault();
@@ -132,97 +138,99 @@ export default {
             });
             this.$emit("closeComponent");
         },
-        updateContact(event) {
-            event.preventDefault();
-            this.pageStatus.waitingOnAPICall = true;
-            var payload = JSON.parse(JSON.stringify(this.contact));
-            payload.phoneNumbers = payload.phoneNumbers.filter(number => number.value != "");
-            payload.emails = payload.emails.filter(email => email.value != "");
+        // updateContact(event) {
+        //     event.preventDefault();
+        //     this.pageStatus.waitingOnAPICall = true;
+        //     var payload = JSON.parse(JSON.stringify(this.contact));
+        //     payload.phoneNumbers = payload.phoneNumbers.filter(number => number.value != "");
+        //     payload.emails = payload.emails.filter(email => email.value != "");
 
-            instance
-            .put(`api/contacts/${payload._id}`, payload)
-            .then(async response => {
-                this.pageStatus.waitingOnAPICall = false;
-                this.$store.commit({ type: "updateContact", amount: payload });
-                this.contact = JSON.parse(JSON.stringify(payload));
-                if (this.contact.phoneNumbers.length == 0)
-                    this.contact.phoneNumbers.push({ name: "Home", value: "" });
-                if (this.contact.emails.length == 0)
-                    this.contact.emails.push({ name: "Home", value: "" });
-                this.unchangedContact = JSON.parse(JSON.stringify(this.contact));
-                this.notEditable = true;
-            })
-            .catch(error => {
-                this.pageStatus.waitingOnAPICall = false;
-                // TODO: Handle Errors
-                console.log(error);
-            });
-        },
-        addPhoneNumber(event, index) {
-            event.preventDefault();
-            if (this.notEditable) return;
-            if (this.contact.phoneNumbers.length - 1 == index)
-                this.contact.phoneNumbers.push({
-                    name: "Home",
-                    value: ""
-                });
-            else this.contact.phoneNumbers.splice(index, 1);
-        },
-        addEmail(event, index) {
-            event.preventDefault();
-            if (this.notEditable) return;
-            if (this.contact.emails.length - 1 == index)
-                this.contact.emails.push({
-                    name: "Home",
-                    value: ""
-                });
-            else this.contact.emails.splice(index, 1);
-        },
-        startEdit(){
-            if(this.editing){
-                // Perform Save, Then Stop Editing
-                this.updateContact();
-            }else{
-                this.editing = true;
-                this.editButtonValue = "Save"
-                this.closeButtonValue = "Discard"
-            }
-        },
-        close(){
-            if(this.editing){
-                console.log("Discard Changes")
-                // Stop Editing, and Discard Changes
-                // Discard Changes
-                this.contact = new Contact(this.originalContact);
-                this.editing = false;
-                this.editButtonValue = "Edit"
-                this.closeButtonValue = "Close"
+        //     instance
+        //     .put(`api/contacts/${payload._id}`, payload)
+        //     .then(async response => {
+        //         this.pageStatus.waitingOnAPICall = false;
+        //         this.$store.commit({ type: "updateContact", amount: payload });
+        //         this.contact = JSON.parse(JSON.stringify(payload));
+        //         if (this.contact.phoneNumbers.length == 0)
+        //             this.contact.phoneNumbers.push({ name: "Home", value: "" });
+        //         if (this.contact.emails.length == 0)
+        //             this.contact.emails.push({ name: "Home", value: "" });
+        //         this.unchangedContact = JSON.parse(JSON.stringify(this.contact));
+        //         this.notEditable = true;
+        //     })
+        //     .catch(error => {
+        //         this.pageStatus.waitingOnAPICall = false;
+        //         // TODO: Handle Errors
+        //         console.log(error);
+        //     });
+        // },
+        // addPhoneNumber(event, index) {
+        //     event.preventDefault();
+        //     if (this.notEditable) return;
+        //     if (this.contact.phoneNumbers.length - 1 == index)
+        //         this.contact.phoneNumbers.push({
+        //             name: "Home",
+        //             value: ""
+        //         });
+        //     else this.contact.phoneNumbers.splice(index, 1);
+        // },
+        // addEmail(event, index) {
+        //     event.preventDefault();
+        //     if (this.notEditable) return;
+        //     if (this.contact.emails.length - 1 == index)
+        //         this.contact.emails.push({
+        //             name: "Home",
+        //             value: ""
+        //         });
+        //     else this.contact.emails.splice(index, 1);
+        // },
+        // startEdit(){
+        //     if(this.editing){
+        //         // Perform Save, Then Stop Editing
+        //         this.updateContact();
+        //     }else{
+        //         this.editing = true;
+        //         this.editButtonValue = "Save"
+        //         this.closeButtonValue = "Discard"
+        //     }
+        // },
+        // close(){
+        //     if(this.editing){
+        //         console.log("Discard Changes")
+        //         // Stop Editing, and Discard Changes
+        //         // Discard Changes
+        //         this.contact = new Contact(this.originalContact);
+        //         this.editing = false;
+        //         this.editButtonValue = "Edit"
+        //         this.closeButtonValue = "Close"
                 
-            }else{
-                // Close Entire Item
-                this.$emit('closeComponent')
-            }
-        },
-        closeComponent(event) {
-            event.preventDefault()
-            this.$emit('closeComponent')
-        },
+        //     }else{
+        //         // Close Entire Item
+        //         this.$emit('closeComponent')
+        //     }
+        // },
+        // closeComponent(event) {
+        //     event.preventDefault()
+        //     this.$emit('closeComponent')
+        // },
         phoneFormat(input){
             return phoneNumberLib.format(input);
         },
         addPhone(event){
-            this.contact.addPhoneNumber(this.newPhone);
-            this.newPhone = {
-                name: "",
-                value: "",
-            };
+          this.contact.addPhoneNumber({});
+            // this.contact.addPhoneNumber(this.newPhone);
+            // this.newPhone = {
+            //     name: "",
+            //     value: "",
+            // };
         },
         addEmail(event){
-            this.contact.addEmail(this.newEmail);
-            this.newEmail = {
-                name: "",
-                value: "",
-            };
+          this.contact.addEmail({});
+            // this.contact.addEmail(this.newEmail);
+            // this.newEmail = {
+            //     name: "",
+            //     value: "",
+            // };
         },
         removePhone(event, phone){
             console.log("Remove Phone");
@@ -234,36 +242,56 @@ export default {
             console.log(email);
             this.contact.removeEmail(email.localID);
         },
+        favoriteContact(){
+          this.contact.favorite = !this.contact.favorite;
+          instance.put(`api/contacts/${this.contact.id}`, this.contact.dbPrep())
+            .then(async (response) => {
+              console.log(response.data)
+              console.log("Added Favorite Successfully");
+              this.pageStatus.waitingOnAPICall = false
+              this.contact = new Contact(response.data.result);
+              this.$store.commit('updateContact', {contact: new Contact(response.data.result)});
+              this.originalContact = new Contact(response.data.result).dbPrep()
+              this.contact = new Contact(response.data.result);
+            })
+            .catch((error) => {
+              this.pageStatus.waitingOnAPICall = false;
+              // TODO: Handle Errors
+              console.log(error);
+            });
+        },
         updateContact() {
             this.pageStatus.waitingOnAPICall = true
             console.log(this.contact.dbPrep());
-            var file = document.getElementById('contactimg');
+            var file = document.getElementById('contactimg-' + this.contact.id);
             var fdata = new FormData();
-            fdata.append("contactimg", file.files[0]);
-            formData.post(`img/contact/${this.contact.id}`, fdata)
+            if( _.has(file, "files") && file.files && file.files != undefined){
+              // User Has New Image To Upload
+              fdata.append("contactimg", file.files[0]);
+              formData.post(`img/contact/${this.contact.id}`, fdata)
                 .then(async (response) => {
-                    this.triggerPhotoUpdate()
+                  this.triggerPhotoUpdate();
                 })
                 .catch((error) => {
-                    // TODO: Handle Errors
-                    console.log(error);
+                  // TODO: Handle Errors
+                  console.log(error);
                 });
+            }
+            
             instance.put(`api/contacts/${this.contact.id}`, this.contact.dbPrep())
-                .then(async (response) => {
-                    console.log(response.data)
-                    this.pageStatus.waitingOnAPICall = false
-                    this.contact = new Contact(response.data.result);
-                    this.$store.commit('updateContact', {contact: new Contact(response.data.result)});
-                    this.originalContact = new Contact(response.data.result).dbPrep()
-                    this.editing = false;
-                    this.editButtonValue = "Edit"
-                    this.closeButtonValue = "Close"
-                })
-                .catch((error) => {
-                    this.pageStatus.waitingOnAPICall = false;
-                    // TODO: Handle Errors
-                    console.log(error);
-                });
+              .then(async (response) => {
+                //console.log(response.data)
+                this.pageStatus.waitingOnAPICall = false
+                this.contact = new Contact(response.data.result);
+                this.$store.commit('updateContact', {contact: new Contact(response.data.result)});
+                this.originalContact = new Contact(response.data.result).dbPrep()
+                this.notEditable = true;
+              })
+              .catch((error) => {
+                this.pageStatus.waitingOnAPICall = false;
+                // TODO: Handle Errors
+                console.log(error);
+              });
         },
         triggerPhotoUpdate(){
             var tmp = this.contact.id;
@@ -288,16 +316,43 @@ export default {
             
         }
   },
-    beforeMount() {
-        this.originalContact = _.clone(this.initContact.dbPrep());
-        this.contact = this.initContact;
-        //console.log(this.contact);
-        // if (this.contact.phoneNumbers.length == 0)
-        //   this.contact.phoneNumbers.push({name: "Home", value: ""})
-        // if (this.contact.emails.length == 0)
-        //   this.contact.emails.push({name: "Home", value: ""})
-        // this.unchangedContact = JSON.parse(JSON.stringify(this.contact))
-    }
+  beforeMount() {
+    this.originalContact = _.clone(this.initContact.dbPrep());
+    this.contact = this.initContact;
+    
+    //console.log(this.contact);
+    // if (this.contact.phoneNumbers.length == 0)
+    //   this.contact.phoneNumbers.push({name: "Home", value: ""})
+    // if (this.contact.emails.length == 0)
+    //   this.contact.emails.push({name: "Home", value: ""})
+    // this.unchangedContact = JSON.parse(JSON.stringify(this.contact))
+  },
+  mounted(){
+    document.getElementById('contact-img-' + this.contact.id).addEventListener("click",()=>{
+      if(!this.notEditable){
+        // Show File Upload Box
+        var contactFileUpload = document.getElementById('contactimg-' + this.contact.id)
+        contactFileUpload.click();
+        contactFileUpload.addEventListener('change', () =>{
+          console.log("Some Change Occured On File")
+          if(contactFileUpload.files){
+            // User Selected A File To Upload
+            var fdata = new FormData();
+              fdata.append("contactimg", contactFileUpload.files[0]);
+              formData.post(`img/preview`, fdata)
+                .then(async (response) => {
+                  console.log(response.data);
+                  document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', response.data);
+                })
+                .catch((error) => {
+                  // TODO: Handle Errors
+                  console.log(error);
+                });
+          }
+        });
+      }
+    });
+  }
 }
 </script>
 
