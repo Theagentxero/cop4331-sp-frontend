@@ -1,58 +1,91 @@
-<template lang="pug">
-b-container
-  img.img-fluid(src="../assets/star.png" class="favorite" v-if="contact.favorite")
-  h4 {{contact.formattedName()}}
-  b-row.reducePaddingNotMarin
-    b-col(cols='3')
-      b-row
-        img.img-fluid( :id="'contact-img-' + contact.id" :src="'/img/contact/' + contact.id")
-        form(:id="'imageUploadForm-' + contact.id" style="display:none")
-          input(type="file" :id="'contactimg-' + contact.id" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp" style="display:none")
-      b-row.text-center
-        b-col.removePadding(cols='12', lg='4')
-          b-button.buttons.mb-1(type='edit', size='sm', variant='our-orange', v-if='notEditable', v-on:click='editComponent') Edit
-          b-button.buttons.mb-1(variant='our-orange', size='sm', v-else='', v-on:click='updateContact') Save
-        b-col.removePadding(cols='12', lg='4')
-          b-button.buttons.mb-1(variant='our-orange', size='sm', v-model='contact.favorite', v-if='notEditable' v-on:click="favoriteContact") Favorite
-          b-button.buttons.mb-1(v-b-modal.modal-sm='', type='delete', size='sm', variant='danger', v-else='', v-on:click='deleteContact') Delete
-        b-col.removePadding(cols='12', lg='4')
-          b-button.buttons.mb-1(type='ok', variant='our-orange', size='sm', v-if='notEditable', v-on:click='closeComponent') OK
-          b-button.buttons.mb-1(type='edit', variant='our-orange', size='sm', v-else='', v-on:click='cancelEdit') Cancel
-    b-col(cols='9')
-      b-row
-        b-col(cols='12', md='6', lg='4')
-          b-form-group#input-group-3(label-size='sm', label='First Name:', label-for='input-3')
-            b-form-input#input-3.form-control(size='sm', v-model='contact.firstName', placeholder='Enter First Name', :disabled='notEditable')
-        b-col(cols='12', md='6', lg='4')
-          b-form-group#input-group-4(label-size='sm', label='Middle Name:', label-for='input-4')
-            b-form-input#input-4(size='sm', v-model='contact.middleName', placeholder='Enter Middle Name', :disabled='notEditable')
-        b-col(cols='12', md='12', lg='4')
-          b-form-group#input-group-5(label-size='sm', label='Last Name:', label-for='input-5')
-            b-form-input#input-5(size='sm', v-model='contact.lastName', placeholder='Enter Last Name', :disabled='notEditable')
-      div(v-for='email, index in contact.emails')
-        b-row.modal-phone-and-email
-          b-col(cols='5', sm='6', md='7')
-            b-form-group(:label="(index == 0) ? 'Email(s): ' : ''", label-for='email-input')
-              b-form-input#email-input(size='sm', v-model='contact.emails[index].value', :disabled='notEditable')
-          b-col.dropDown(cols='5', :class="(index == 0) ? 'options-dropdown' : ''")
-            b-row
-              b-col(cols='11')
-                b-form-group#input-group-2(label-for='input-2')
-                  b-form-select#input-2.form-control(size='sm', v-model='contact.emails[index].name', :options='typeOptions', :disabled='notEditable', required='required')
-              b-col.removePadding(cols='1')
-                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addEmail($event)', v-text="(contact.emails.length-1) == index ? '+' : '-'")
-      div(v-for='phone, index in contact.phoneNumbers')
-        b-row.modal-phone-and-email
-          b-col(cols='5', sm='6', md='7')
-            b-form-group(:label="(index == 0) ? 'Phone Number(s): ' : ''", label-for='phone-number-input')
-              b-form-input#phone-number-input(size='sm', v-model='contact.phoneNumbers[index].value', :formatter="phoneFormat", :disabled='notEditable')
-          b-col.dropDown(cols='5', :class="(index == 0) ? 'options-dropdown phone-dropdown' : ''")
-            b-row
-              b-col(cols='11')
-                b-form-group#input-group-1(label-for='input-1')
-                  b-form-select#input-1.form-control(size='sm', v-model='contact.phoneNumbers[index].name', :options='typeOptions', :disabled='notEditable', required='required')
-              b-col.removePadding(cols='1')
-                b-button.add(size='sm', squared='', variant='our-orange', v-on:click='addPhone($event)', v-text="(contact.phoneNumbers.length-1) == index ? '+' : '-'")
+<template>
+  <b-container>
+    <h4>{{contact.formattedName()}}</h4>
+    <b-row class="reducePaddingNotMarin">
+      <b-col cols="3">
+        <b-row><img class="img-fluid fav-star favorite" src="../assets/star.png" v-if="contact.favorite" /><img class="img-fluid" :id="'contact-img-' + contact.id" :src="'/img/contact/' + contact.id" />
+          <form :id="'imageUploadForm-' + contact.id" style="display:none;">
+            <input type="file" :id="'contactimg-' + contact.id" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp" style="display:none;" />
+          </form>
+        </b-row>
+        <b-row class="text-center">
+          <b-col class="removePadding" cols="12" lg="4">
+            <b-button class="buttons mb-1" type="edit" size="sm" variant="our-orange" v-if="notEditable" v-on:click="editComponent">Edit</b-button>
+            <b-button class="buttons mb-1" variant="our-orange" size="sm" v-else="" v-on:click="updateContact">Save</b-button>
+          </b-col>
+          <b-col class="removePadding" cols="12" lg="4">
+            <b-button class="buttons mb-1" variant="our-orange" size="sm" v-model="contact.favorite" v-if="notEditable" v-on:click="favoriteContact">Favorite</b-button>
+            <b-button class="buttons mb-1" v-b-modal.modal-sm="" type="delete" size="sm" variant="danger" v-else="" v-on:click="deleteContact">Delete</b-button>
+          </b-col>
+          <b-col class="removePadding" cols="12" lg="4">
+            <b-button class="buttons mb-1" type="ok" variant="our-orange" size="sm" v-if="notEditable" v-on:click="closeComponent">OK</b-button>
+            <b-button class="buttons mb-1" type="edit" variant="our-orange" size="sm" v-else="" v-on:click="cancelEdit">Cancel</b-button>
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col cols="9">
+        <b-row>
+          <b-col cols="12" md="6" lg="4">
+            <b-form-group id="input-group-3" label-size="sm" label="First Name:" label-for="input-3">
+              <b-form-input class="form-control" id="input-3" size="sm" v-model="contact.firstName" placeholder="Enter First Name" :disabled="notEditable"></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col cols="12" md="6" lg="4">
+            <b-form-group id="input-group-4" label-size="sm" label="Middle Name:" label-for="input-4">
+              <b-form-input id="input-4" size="sm" v-model="contact.middleName" placeholder="Enter Middle Name" :disabled="notEditable"></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col cols="12" md="12" lg="4">
+            <b-form-group id="input-group-5" label-size="sm" label="Last Name:" label-for="input-5">
+              <b-form-input id="input-5" size="sm" v-model="contact.lastName" placeholder="Enter Last Name" :disabled="notEditable"></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <div v-for="email, index in contact.emails">
+          <b-row class="modal-phone-and-email">
+            <b-col cols="5" sm="6" md="7">
+              <b-form-group :label="(index == 0) ? 'Email(s): ' : ''" label-for="email-input">
+                <b-form-input id="email-input" size="sm" v-model="contact.emails[index].value" :disabled="notEditable"></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col class="dropDown" cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
+              <b-row>
+                <b-col cols="11">
+                  <b-form-group id="input-group-2" label-for="input-2">
+                    <b-form-select class="form-control" id="input-2" size="sm" v-model="contact.emails[index].name" :options="typeOptions" :disabled="notEditable" required="required"></b-form-select>
+                  </b-form-group>
+                </b-col>
+                <b-col class="removePadding" cols="1">
+                  <b-button class="add" size="sm" squared="" variant="our-orange" v-on:click="addEmail($event, index)" v-text="(contact.emails.length-1) == index ? '+' : '-'"></b-button>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </div>
+        <div v-for="phone, index in contact.phoneNumbers">
+          <b-row class="modal-phone-and-email">
+            <b-col cols="5" sm="6" md="7">
+              <b-form-group :label="(index == 0) ? 'Phone Number(s): ' : ''" label-for="phone-number-input">
+                <b-form-input id="phone-number-input" size="sm" v-model="contact.phoneNumbers[index].value" :formatter="phoneFormat" :disabled="notEditable"></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col class="dropDown" cols="5" :class="(index == 0) ? 'options-dropdown phone-dropdown' : ''">
+              <b-row>
+                <b-col cols="11">
+                  <b-form-group id="input-group-1" label-for="input-1">
+                    <b-form-select class="form-control" id="input-1" size="sm" v-model="contact.phoneNumbers[index].name" :options="typeOptions" :disabled="notEditable" required="required"></b-form-select>
+                  </b-form-group>
+                </b-col>
+                <b-col class="removePadding" cols="1">
+                  <b-button class="add" size="sm" squared="" variant="our-orange" v-on:click="addPhone($event, index)" v-text="(contact.phoneNumbers.length-1) == index ? '+' : '-'"></b-button>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-row>
+        </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -106,8 +139,8 @@ export default {
             event.preventDefault();
             this.notEditable = false;
             this.contact = new Contact(this.originalContact);
-            this.contact.addPhoneNumber({});
-            this.contact.addEmail({});
+            this.contact.addPhoneNumber({name:'Home',value: ''});
+            this.contact.addEmail({name:'Home',value: ''});
         },
         cancelEdit(event) {
             event.preventDefault();
@@ -216,16 +249,22 @@ export default {
         phoneFormat(input){
             return phoneNumberLib.format(input);
         },
-        addPhone(event){
-          this.contact.addPhoneNumber({});
+        addPhone(event, index){
+          if ((this.contact.phoneNumbers.length-1) == index)
+            this.contact.addPhoneNumber({name:'Home',value: ''});
+          else
+            this.contact.phoneNumbers.splice(index, 1)
             // this.contact.addPhoneNumber(this.newPhone);
             // this.newPhone = {
             //     name: "",
             //     value: "",
             // };
         },
-        addEmail(event){
-          this.contact.addEmail({});
+        addEmail(event, index){
+          if ((this.contact.emails.length-1) == index)
+            this.contact.addEmail({name:'Home',value: ''});
+          else
+            this.contact.emails.splice(index, 1)
             // this.contact.addEmail(this.newEmail);
             // this.newEmail = {
             //     name: "",
@@ -490,4 +529,8 @@ export default {
     1.5px 1.5px 2px rgba(249, 105, 14, 1);
 }
 
+.fav-star {
+  position: absolute;
+  width: 60px;
+}
 </style>
