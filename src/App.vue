@@ -4,11 +4,15 @@
   </div>
 </template>
 
+
 <style lang="scss">
 #app {
+  height: 100vh;
+  background: linear-gradient(70deg, #aec6cf 60%, #c3b091 60%);
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
 }
 </style>
+
+// a0e7e5

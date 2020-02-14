@@ -23,8 +23,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$dark-orange: #FFC107;
+
 .contacts {
-  background-color: $warning-variant !important;
+  background: linear-gradient(to right, $dark-orange, $warning-variant);
   margin-top: 5rem;
   margin-bottom: 5rem;
   box-shadow: 0px 0px 10px 3.5px gray;

@@ -1,47 +1,76 @@
 <template>
+<div class="wrapper" v-bind:style="bgc">
   <b-container fluid id="container">
     <b-form class="form-container sign-up-container" @submit="signUp">
       <h1>Sign Up</h1>
       <b-row>
         <b-col cols="12" md="6">
-          <b-form-input
+          <b-form-input 
             v-model="signUpForm.form.first_name"
-            id="signUpfName"
+            :state="(fNActive) ? first_name_state : null"
+			      v-on:click="activateFirstName"
+            aria-describedby="input-feedback"
+            :id="`signUpfName`"
             type="text"
-            required
             placeholder="First Name"
           />
         </b-col>
         <b-col cols="12" md="6">
           <b-form-input
             v-model="signUpForm.form.last_name"
-            id="signUplName"
+			      :state="(lNActive) ? last_name_state : null"
+			      v-on:click="activateLastName"
+            aria-describedby="input-feedback"
+            :id="`signUplName`"
             type="text"
-            required
             placeholder="Last Name"
           />
         </b-col>
+
       </b-row>
-      <b-form-input v-model="username" id="signUpEmail" type="email" required placeholder="Email" />
+      <b-form-input 
+        v-model="username"
+        id="signUpEmail" 
+        type="email" 
+        required 
+        placeholder="Email" 
+      />
+
       <b-form-input
         v-model="signUpForm.form.password"
-        id="signUpPassword"
+        :state="(pActive) ? password_name_state : null"
+		    v-on:click="activatePassword"
+        :id="`signUpPassword`"
         type="password"
         required
         placeholder="Password"
       />
+
+      <b-popover
+          :target="`signUpPassword`"
+          :placement="`right`"
+          triggers="focus"
+          variant="info"
+          >Enter at least 8 characters</b-popover>
+
       <b-form-input
         v-model="signUpForm.form.verifyPassword"
+        :state="(vpActive) ? verifyPass_name_state : null"
+		    v-on:click="activateVerifyPassword"
         id="signUpotherPass"
         type="password"
-        required
         placeholder="Re-enter password"
       />
       <b-button type="submit" variant="warning" @click="signUp">Sign Up</b-button>
     </b-form>
     <b-form class="form-container sign-in-container" @submit="signIn">
       <h1>Sign in</h1>
-      <b-form-input v-model="username" id="signInEmail" type="email" required placeholder="Email" />
+      <b-form-input 
+        v-model="username" 
+        id="signInEmail" 
+        type="email"
+		    placeholder="Email" 
+      />
       <b-form-input
         v-model="signInForm.form.password"
         id="signInPass"
@@ -72,9 +101,13 @@
       </div>
     </div>
   </b-container>
+  </div>
 </template>
 
 <script>
+
+import {required, minLength, maxLength} from 'vuelidate/lib/validators'
+
 const axios = require("axios");
 const uuidv4 = require("uuid/v4");
 const jwt = require("jsonwebtoken");
@@ -92,6 +125,11 @@ export default {
   data() {
     return {
       username: "",
+	  fNActive: false,
+	  lNActive: false,
+	  emailActive: false,
+	  pActive: false,
+	  vpActive: false,
       signInForm: {
         form: {
           password: ""
@@ -125,6 +163,33 @@ export default {
   computed: {
     usernameInvalidFeedback() {
       return "Must Be A Valid Email";
+    },
+    first_name_state() {
+      return this.signUpForm.form.first_name.length > 0 ? true : false
+    },
+    last_name_state() {
+      return this.signUpForm.form.last_name.length > 0 ? true : false
+    },
+    password_name_state() {
+      return this.signUpForm.form.password.length >= 8 ? true : false
+    },
+    verifyPass_name_state() {
+      var pass = this.signUpForm.form.password
+      var verifyPass = this.signUpForm.form.verifyPassword
+      return ((pass == verifyPass) && (verifyPass.length >= 8))
+    },
+    usernameInvalidFeedback() {
+      return "Must Be A Valid Email";
+    }
+  },
+  validations: {
+    first_name: {
+      required,
+      minLength: minLength(3),
+    },
+    last_name: {
+      required,
+      minLength: minLength(3),
     }
   },
   methods: {
@@ -170,8 +235,14 @@ export default {
         })
         .catch(error => {
           this.formFailed = true;
-          this.formWaiting = false;
-          // TODO: Handle Errors
+		  this.formWaiting = false;
+		  // TODO: Handle Errors
+		  var errorNum = error.response.status
+		  
+		  // 400 code means invalid email has been written
+		  // 403 code means valid email but not existing user
+		  // 401 means email exists but password is wrongh
+
         });
     },
     signUp: function() {
@@ -209,6 +280,7 @@ export default {
           console.log(error.response.data.errors);
           console.log(error.response.data.info);
         });
+      //alert(JSON.stringify(this.form));
     },
     checkPasswordRequirements() {
       var isEightOrLonger = /^(?=.{8,72})/;
@@ -290,14 +362,19 @@ export default {
         this.showIssueText = false;
         this.invalidLogin = null;
       }
-    }
-  }
+    },
+    activateFirstName() { this.fNActive = true },
+    activateLastName() { this.lNActive = true },
+    activateEmail() { this.emailActive = true },
+    activatePassword() { this.pActive = true },
+    activateVerifyPassword() { this.vpActive = true }
+	},
 };
 </script>
 
 <style lang="scss" scoped>
-$dark-orange: #f69b29;
-$warning-variant: #ffc107;
+$dark-orange: #FFC107;
+
 
 * {
   box-sizing: border-box;
@@ -380,8 +457,13 @@ button.ghost {
   border-color: #ffffff;
 }
 
+#container {
+  // color: $warning-variant;
+  color: black;
+}
+
 form {
-  background-color: #ffffff;
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,7 +494,7 @@ input {
 }
 
 .container-fluid {
-  background-color: #fff;
+  background-color: #eee;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
@@ -420,7 +502,8 @@ input {
   width: 768px;
   max-width: 100%;
   min-height: 480px;
-  margin-top: 10%;
+  // margin-top: 10%;
+  top: 20vh;
 }
 
 .form-container {
@@ -488,12 +571,11 @@ input {
 
 .overlay {
   background: #f69b29;
-  background: -webkit-linear-gradient(to right, $dark-orange, $warning-variant);
   background: linear-gradient(to right, $dark-orange, $warning-variant);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
-  color: #ffffff;
+  color: #242424;
   position: relative;
   left: -100%;
   height: 100%;
