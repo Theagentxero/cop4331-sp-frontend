@@ -1,4 +1,5 @@
 <template>
+<div class="wrapper" v-bind:style="bgc">
   <b-container fluid id="container">
     <b-form class="form-container sign-up-container" @submit="signUp">
       <h1>Sign Up</h1>
@@ -105,6 +106,7 @@
       </div>
     </div>
   </b-container>
+  </div>
 </template>
 
 <script>
@@ -147,7 +149,7 @@ export default {
 
   data() {
     return {
-	  username: "",
+      username: "",
 	  fNActive: false,
 	  lNActive: false,
 	  emailActive: false,
@@ -371,6 +373,7 @@ export default {
 
 <style lang="scss" scoped>
 $dark-orange: #FFC107;
+
 
 * {
   box-sizing: border-box;

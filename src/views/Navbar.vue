@@ -40,8 +40,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  $dark-orange: #FFC107;
 #navbar{
-  background: $warning-variant;
+  background: linear-gradient(to right, $dark-orange, $warning-variant);
   box-shadow: 0px 0px 5px 2px $warning-variant;
   color:black;
   #search-field {

@@ -43,6 +43,9 @@ export default {
 
 
 <style lang="scss" scoped>
+
+
+
 .contacts{
   background-color: $warning-variant !important;
   margin-top: 5rem;
