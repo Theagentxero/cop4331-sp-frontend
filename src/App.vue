@@ -6,12 +6,8 @@
 
 
 <style lang="scss">
-
-html{
-  background: linear-gradient(70deg, #aec6cf 60%, #c3b091 60%);
-}
-
 #app {
+  height: 100vh;
   background: linear-gradient(70deg, #aec6cf 60%, #c3b091 60%);
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

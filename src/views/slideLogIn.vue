@@ -501,7 +501,8 @@ input {
   width: 768px;
   max-width: 100%;
   min-height: 480px;
-  margin-top: 10%;
+  // margin-top: 10%;
+  top: 20vh;
 }
 
 .form-container {
@@ -569,7 +570,6 @@ input {
 
 .overlay {
   background: #f69b29;
-  background: -webkit-linear-gradient(to right, $dark-orange, $warning-variant);
   background: linear-gradient(to right, $dark-orange, $warning-variant);
   background-repeat: no-repeat;
   background-size: cover;
