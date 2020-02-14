@@ -171,81 +171,6 @@ export default {
             });
             this.$emit("closeComponent");
         },
-        // updateContact(event) {
-        //     event.preventDefault();
-        //     this.pageStatus.waitingOnAPICall = true;
-        //     var payload = JSON.parse(JSON.stringify(this.contact));
-        //     payload.phoneNumbers = payload.phoneNumbers.filter(number => number.value != "");
-        //     payload.emails = payload.emails.filter(email => email.value != "");
-
-        //     instance
-        //     .put(`api/contacts/${payload._id}`, payload)
-        //     .then(async response => {
-        //         this.pageStatus.waitingOnAPICall = false;
-        //         this.$store.commit({ type: "updateContact", amount: payload });
-        //         this.contact = JSON.parse(JSON.stringify(payload));
-        //         if (this.contact.phoneNumbers.length == 0)
-        //             this.contact.phoneNumbers.push({ name: "Home", value: "" });
-        //         if (this.contact.emails.length == 0)
-        //             this.contact.emails.push({ name: "Home", value: "" });
-        //         this.unchangedContact = JSON.parse(JSON.stringify(this.contact));
-        //         this.notEditable = true;
-        //     })
-        //     .catch(error => {
-        //         this.pageStatus.waitingOnAPICall = false;
-        //         // TODO: Handle Errors
-        //         console.log(error);
-        //     });
-        // },
-        // addPhoneNumber(event, index) {
-        //     event.preventDefault();
-        //     if (this.notEditable) return;
-        //     if (this.contact.phoneNumbers.length - 1 == index)
-        //         this.contact.phoneNumbers.push({
-        //             name: "Home",
-        //             value: ""
-        //         });
-        //     else this.contact.phoneNumbers.splice(index, 1);
-        // },
-        // addEmail(event, index) {
-        //     event.preventDefault();
-        //     if (this.notEditable) return;
-        //     if (this.contact.emails.length - 1 == index)
-        //         this.contact.emails.push({
-        //             name: "Home",
-        //             value: ""
-        //         });
-        //     else this.contact.emails.splice(index, 1);
-        // },
-        // startEdit(){
-        //     if(this.editing){
-        //         // Perform Save, Then Stop Editing
-        //         this.updateContact();
-        //     }else{
-        //         this.editing = true;
-        //         this.editButtonValue = "Save"
-        //         this.closeButtonValue = "Discard"
-        //     }
-        // },
-        // close(){
-        //     if(this.editing){
-        //         console.log("Discard Changes")
-        //         // Stop Editing, and Discard Changes
-        //         // Discard Changes
-        //         this.contact = new Contact(this.originalContact);
-        //         this.editing = false;
-        //         this.editButtonValue = "Edit"
-        //         this.closeButtonValue = "Close"
-                
-        //     }else{
-        //         // Close Entire Item
-        //         this.$emit('closeComponent')
-        //     }
-        // },
-        // closeComponent(event) {
-        //     event.preventDefault()
-        //     this.$emit('closeComponent')
-        // },
         phoneFormat(input){
             return phoneNumberLib.format(input);
         },
@@ -254,22 +179,12 @@ export default {
             this.contact.addPhoneNumber({name:'Home',value: ''});
           else
             this.contact.phoneNumbers.splice(index, 1)
-            // this.contact.addPhoneNumber(this.newPhone);
-            // this.newPhone = {
-            //     name: "",
-            //     value: "",
-            // };
         },
         addEmail(event, index){
           if ((this.contact.emails.length-1) == index)
             this.contact.addEmail({name:'Home',value: ''});
           else
             this.contact.emails.splice(index, 1)
-            // this.contact.addEmail(this.newEmail);
-            // this.newEmail = {
-            //     name: "",
-            //     value: "",
-            // };
         },
         removePhone(event, phone){
             console.log("Remove Phone");

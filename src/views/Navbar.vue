@@ -20,8 +20,8 @@
             // Right Aligned Navbar Items
             b-navbar-nav.ml-auto
                 b-nav-form(@submit.stop.prevent='searchContacts')
-                    b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='lg', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
-                    b-button.my-2.my-sm-0(type="submit", size='md') Search
+                    b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='sm', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
+                    b-button.my-2.my-sm-0(type="submit", size='sm', variant="warning") Search
 </template>
 
 <script>
@@ -122,16 +122,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $dark-orange: #FFC107;
+$dark-orange: #FFC107;
 #navbar{
   background: linear-gradient(to right, $dark-orange, $warning-variant);
   box-shadow: 0px 0px 5px 2px $warning-variant;
   color:black;
   #search-field {
-    width: 35vw;
-    @media (min-width: 960px) {
-      width: 40vw;
-    }
+    width: 20vw;
+  }
+  .form-control:focus {
+    border-color: orange;
+    box-shadow: 0px 0px 4px rgba(243, 156, 18, 1)
+    inset, 1.5px 1.5px 2px rgba(232, 126, 4, 1);
   }
 }
 
