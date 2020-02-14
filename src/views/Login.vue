@@ -119,9 +119,7 @@ export default {
                 var userInfo = null;
                 var seekCookie = "userinfo=";
                 var allRawCookies = document.cookie;
-                //console.log(allRawCookies);
                 var decodedCookies = decodeURIComponent(allRawCookies);
-                //console.log(decodedCookies);
                 // Split Cookies
                 var cookiesAry = decodedCookies.split(';');
                 // Find The Correct Cookie
@@ -136,7 +134,6 @@ export default {
                 if(match != null){
                     var tmpVal = match.substring(seekCookie.length, match.length);
                     userInfo = JSON.parse(tmpVal)
-                    console.log(userInfo);
                     this.$store.commit('login', userInfo);
                     if(this.$store.getters.isAuthenticated){
                         this.$router.push({path:"/home"});

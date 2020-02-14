@@ -180,7 +180,6 @@ export default {
             if(!meetsMin){
                 str = 0;
             }
-            console.log(str);
             if(str == 0){
                 this.passStrengthPillLabel = "Unsuitable - Must Be 8 Characters Long"
                 this.passStrengthPillVariant = "danger"
@@ -207,7 +206,6 @@ export default {
         },
         usernameIsEmail(event){
             var emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            console.log("Blur Email");
             this.state.username = emailRegex.test(this.form.username);
 
         },
@@ -219,15 +217,12 @@ export default {
             }
             this.formWaiting = true;
             var values = _.clone(this.form);
-            console.log(values)
             values.password = sha256(values.password);
             values.verifyPassword = null;
-            console.log(values)
             axios.post('api/auth/create.json', values)
             .then((response) => {
                 this.formComplete = true;
                 this.formWaiting = false;
-                console.log(response);
             })
             .catch((error) => {
                 this.formFailed = true;
@@ -237,8 +232,6 @@ export default {
                     // Put Something On The Screen To Say That
                 }
                 console.log(error);
-                console.log(error.response.data.status);
-                console.log(error.response.data.info);
             });
         }
     }

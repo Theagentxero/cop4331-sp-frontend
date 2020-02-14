@@ -1,5 +1,4 @@
 <template>
-<div class="wrapper" v-bind:style="bgc">
   <b-container fluid id="container">
     <b-form class="form-container sign-up-container" @submit="signUp">
       <h1>Sign Up</h1>
@@ -13,6 +12,7 @@
             :id="`signUpfName`"
             type="text"
             placeholder="First Name"
+            required
           />
         </b-col>
         <b-col cols="12" md="6">
@@ -32,8 +32,8 @@
         v-model="username"
         id="signUpEmail" 
         type="email" 
-        required 
-        placeholder="Email" 
+        placeholder="Email"
+        required
       />
 
       <b-form-input
@@ -42,16 +42,16 @@
 		    v-on:click="activatePassword"
         :id="`signUpPassword`"
         type="password"
-        required
         placeholder="Password"
+        required
       />
 
       <b-popover
-          :target="`signUpPassword`"
-          :placement="`right`"
-          triggers="focus"
-          variant="info"
-          >Enter at least 8 characters</b-popover>
+        :target="`signUpPassword`"
+        :placement="`right`"
+        triggers="focus"
+        variant="info"
+        >Enter at least 8 characters</b-popover>
 
       <b-form-input
         v-model="signUpForm.form.verifyPassword"
@@ -60,6 +60,7 @@
         id="signUpotherPass"
         type="password"
         placeholder="Re-enter password"
+        required
       />
       <b-button type="submit" variant="warning" @click="signUp">Sign Up</b-button>
     </b-form>
@@ -70,13 +71,14 @@
         id="signInEmail" 
         type="email"
 		    placeholder="Email" 
+        required
       />
       <b-form-input
         v-model="signInForm.form.password"
         id="signInPass"
         type="password"
-        required
         placeholder="Password"
+        required
       />
       <b-button type="submit" variant="warning" @click="signIn">Sign In</b-button>
     </b-form>
@@ -101,7 +103,6 @@
       </div>
     </div>
   </b-container>
-  </div>
 </template>
 
 <script>
@@ -256,16 +257,13 @@ export default {
       this.formWaiting = true;
       this.signUpForm.form.username = this.username;
       var values = _.clone(this.signUpForm.form);
-      //console.log(values)
       values.password = sha256(values.password);
       values.verifyPassword = null;
-      //console.log(values)
       axios
         .post("api/auth/create.json", values)
         .then(response => {
           this.formComplete = true;
           this.formWaiting = false;
-          console.log(response);
         })
         .catch(error => {
           this.formFailed = true;
@@ -277,8 +275,6 @@ export default {
           // Can Throw ERRORS
           // 403 - Username already exists
           console.log(error);
-          console.log(error.response.data.errors);
-          console.log(error.response.data.info);
         });
       //alert(JSON.stringify(this.form));
     },
@@ -314,7 +310,6 @@ export default {
       if (!meetsMin) {
         str = 0;
       }
-      //console.log(str);
       if (str == 0) {
         this.passStrengthPillLabel = "Unsuitable - Must Be 8 Characters Long";
         this.passStrengthPillVariant = "danger";
@@ -338,7 +333,6 @@ export default {
     },
     usernameIsEmail(event) {
       var emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      console.log("Blur Email");
       this.state.username = emailRegex.test(this.form.username);
     },
 

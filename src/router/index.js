@@ -82,14 +82,11 @@ router.beforeEach( async (to, from, next) => {
         instance.get('api/auth/checkAuth.json')
             .then(async (response) => {
                 if(response.status == 200){
-                    //console.log("User Actually Has Auth")
                     // Setup Store
                     var userInfo = null;
                     var seekCookie = "userinfo=";
                     var allRawCookies = document.cookie;
-                    //console.log(allRawCookies);
                     var decodedCookies = decodeURIComponent(allRawCookies);
-                    //console.log(decodedCookies);
                     // Split Cookies
                     var cookiesAry = decodedCookies.split(';');
                     // Find The Correct Cookie
@@ -123,26 +120,20 @@ router.beforeEach( async (to, from, next) => {
     }
     // Check if the route requires authentication
     if(to.meta.requiresAuth) {
-        //console.log("Route Requires Auth");
         // check if the user is authenticated
         if(store.getters.isAuthenticated) {
-            //console.log("User Has Auth");
             // the next method allow the user to continue to the router
             next();
         }else{
-            //console.log("User Does Not Have Auth");
             // TODO: This should make an auth request that will check the users cookie to check if the user is already logged in, and log them in on this instance
             instance.get('api/auth/checkAuth.json')
             .then(async (response) => {
                 if(response.status == 200){
-                    //console.log("User Actually Has Auth")
                     // Setup Store
                     var userInfo = null;
                     var seekCookie = "userinfo=";
                     var allRawCookies = document.cookie;
-                    //console.log(allRawCookies);
                     var decodedCookies = decodeURIComponent(allRawCookies);
-                    //console.log(decodedCookies);
                     // Split Cookies
                     var cookiesAry = decodedCookies.split(';');
                     // Find The Correct Cookie
@@ -175,7 +166,6 @@ router.beforeEach( async (to, from, next) => {
             });
         }
     }else {
-        //console.log("Route Does Not Require Auth");
         // Go Wherever They Asked, No Auth Required For The Requested Route
         next()
     }

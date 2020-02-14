@@ -61,8 +61,6 @@ export default {
                 this.$store.commit('loadContacts', {contacts: response.data.result});
                 //this.$store.commit({type: 'loadContacts', amount: response.data.result})
                 this.contactSections = this.$store.getters.getContacts
-                console.log(this.contactSections);
-                console.log("Fetch Contacts Completed")
             })
             .catch((error) => {
                 this.pageStatus.waitingOnAPICall = false;
@@ -74,7 +72,6 @@ export default {
         this.contactSections = payload
     },
     delUpdate(){
-        console.log("Performing Update")
         this.contactSections = this.$store.getters.getContacts;
     }
   },
@@ -86,11 +83,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
+$dark-orange: #FFC107;
 
 .contacts{
-  background-color: $warning-variant !important;
+  background: linear-gradient(to right, $dark-orange, $warning-variant);
   margin-top: 5rem;
   margin-bottom: 5rem;
   box-shadow: 0px 0px 10px 3.5px gray;
@@ -101,4 +97,5 @@ export default {
     width: 90px;
   }
 }
+
 </style>
