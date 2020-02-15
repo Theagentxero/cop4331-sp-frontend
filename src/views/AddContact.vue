@@ -88,59 +88,6 @@
                 </b-col>
             </b-row>
         </b-form-group>
-
-
-        <!-- <div v-for="phone, index in addContactSubmitForm.phoneNumbers">
-            <b-row class="modal-phone-and-email">
-                <b-col cols="6">
-                    <b-form-group
-                        :label="(index == 0) ? 'Phone Number: ' : ''"
-                        label-for="phone-number-input"
-                    >
-                        <b-form-input
-                            id="phone-number-input"
-                            v-model="newContact.phoneNumbers[index].value"
-                        ></b-form-input>
-                    </b-form-group>
-                </b-col>
-                <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
-                <b-form-group id="input-group-1" label-for="input-1">
-                    <b-form-select
-                        id="input-1"
-                        v-model="newContact.phoneNumbers[index].name"
-                        :options="typeOptions"
-                        required
-                    ></b-form-select>
-                </b-form-group>
-                </b-col>
-                <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-                    <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addPhoneNumber($event, index)" v-text="(addContactSubmitForm.phoneNumbers.length-1) == index ? '+' : '-'"></b-button>
-                </b-col>
-            </b-row>
-        </div>
-        <div v-for="email, index in addContactSubmitForm.emails">
-            <b-row class="modal-phone-and-email">
-            <b-col cols="6">
-                <b-form-group :label="(index == 0) ? 'Email: ' : ''" label-for="email-input">
-                <b-form-input id="email-input" v-model="contact.emails[index].value"></b-form-input>
-                </b-form-group>
-            </b-col>
-            <b-col cols="5" :class="(index == 0) ? 'options-dropdown' : ''">
-                <b-form-group id="input-group-2" label-for="input-2">
-                <b-form-select
-                    id="input-2"
-                    v-model="contact.emails[index].name"
-                    :options="typeOptions"
-                    required
-                ></b-form-select>
-                </b-form-group>
-            </b-col>
-            <b-col cols="1" :class="(index == 0) ? 'plus-button' : 'plus-button-xtra'">
-                <b-button class="add" size="sm" squared variant="our-orange" v-on:click="addEmail($event, index)" v-text="(addContactSubmitForm.emails.length-1) == index ? '+' : '-'"></b-button>
-            </b-col>
-            </b-row>
-        </div> -->
-
     </b-form>
 </b-modal>
 </template>
@@ -230,21 +177,6 @@ export default {
                     {name: "", value: ""},
                 ]
             };
-            //   this.addContactSubmitForm.firstName = "";
-            //   this.addContactSubmitForm.middleName = "";
-            //   this.addContactSubmitForm.lastName = "";
-            //   this.addContactSubmitForm.phoneNumbers = [
-            //     {
-            //       name: "Home",
-            //       value: ""
-            //     }
-            //   ];
-            //   this.addContactSubmitForm.emails = [
-            //     {
-            //       name: "Home",
-            //       value: ""
-            //     }
-            //   ];
         },
         handleOk(bvModalEvt) {
             // Prevent modal from closing
@@ -324,15 +256,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.options-dropdown {
-//   margin-top: 32px;
-}
 .plus-button {
-    // margin-top: 35px;
     padding-left: 0px;
 }
 .plus-button-xtra {
-    // margin-top: 4px;
     padding-left: 0px;
 }
 </style>

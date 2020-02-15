@@ -6,7 +6,7 @@
         // Navbar Toggle Button
         b-navbar-toggle(target='nav-collapse')
         // Collapsed Navbar Items
-        b-collapse#nav-collapse(is-nav='')
+        b-collapse#nav-collapse(is-nav)
             // Left Aligned Navbar Items
             b-navbar-nav
                 b-nav-item(variant='our-orange', v-on:click='favoritesToggle') Favorite Crabs
@@ -134,6 +134,9 @@ $dark-orange: #FFC107;
     border-color: orange;
     box-shadow: 0px 0px 4px rgba(243, 156, 18, 1)
     inset, 1.5px 1.5px 2px rgba(232, 126, 4, 1);
+  }
+  .nav-link {
+    color: #000;
   }
 }
 

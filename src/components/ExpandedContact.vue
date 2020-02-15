@@ -1,25 +1,31 @@
 <template>
   <b-container>
-    <h4>{{contact.formattedName()}}</h4>
+    <b-row>
+      <img class="img-fluid fav-star favorite mr-1" src="../assets/star.png" v-if="contact.favorite" />
+      <h4 id="name-title">{{contact.formattedName()}}</h4>
+      <img class="img-fluid fav-star favorite ml-1" src="../assets/star.png" v-if="contact.favorite" />
+
+    </b-row>
     <b-row class="reducePaddingNotMarin">
       <b-col cols="3">
-        <b-row><img class="img-fluid fav-star favorite" src="../assets/star.png" v-if="contact.favorite" /><img class="img-fluid" :id="'contact-img-' + contact.id" :src="'/img/contact/' + contact.id" />
+        <b-row>
+          <img class="img-fluid" :id="'contact-img-' + contact.id" :src="'/img/contact/' + contact.id" />
           <form :id="'imageUploadForm-' + contact.id" style="display:none;">
             <input type="file" :id="'contactimg-' + contact.id" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp" style="display:none;" />
           </form>
         </b-row>
         <b-row class="text-center">
           <b-col class="removePadding" cols="12" lg="4">
-            <b-button class="buttons mb-1" type="edit" size="sm" variant="our-orange" v-if="notEditable" v-on:click="editComponent">Edit</b-button>
-            <b-button class="buttons mb-1" variant="our-orange" size="sm" v-else="" v-on:click="updateContact">Save</b-button>
+            <b-button class="buttons mb-1 mt-2" type="edit" size="sm" variant="our-orange" v-if="notEditable" v-on:click="editComponent">Edit</b-button>
+            <b-button class="buttons mb-1 mt-2" variant="our-orange" size="sm" v-else="" v-on:click="updateContact">Save</b-button>
           </b-col>
           <b-col class="removePadding" cols="12" lg="4">
-            <b-button class="buttons mb-1" variant="our-orange" size="sm" v-model="contact.favorite" v-if="notEditable" v-on:click="favoriteContact">Favorite</b-button>
-            <b-button class="buttons mb-1" v-b-modal.modal-sm="" type="delete" size="sm" variant="danger" v-else="" v-on:click="deleteContact">Delete</b-button>
+            <b-button class="buttons mb-1 mt-2" variant="our-orange" size="sm" v-model="contact.favorite" v-if="notEditable" v-on:click="favoriteContact">Favorite</b-button>
+            <b-button class="buttons mb-1 mt-2" v-b-modal.modal-sm="" type="delete" size="sm" variant="danger" v-else="" v-on:click="deleteContact">Delete</b-button>
           </b-col>
           <b-col class="removePadding" cols="12" lg="4">
-            <b-button class="buttons mb-1" type="ok" variant="our-orange" size="sm" v-if="notEditable" v-on:click="closeComponent">OK</b-button>
-            <b-button class="buttons mb-1" type="edit" variant="our-orange" size="sm" v-else="" v-on:click="cancelEdit">Cancel</b-button>
+            <b-button class="buttons mb-1 mt-2" type="ok" variant="our-orange" size="sm" v-if="notEditable" v-on:click="closeComponent">OK</b-button>
+            <b-button class="buttons mb-1 mt-2" type="edit" variant="our-orange" size="sm" v-else="" v-on:click="cancelEdit">Cancel</b-button>
           </b-col>
         </b-row>
       </b-col>
@@ -431,6 +437,7 @@ export default {
 
 .buttons {
   box-shadow: 1px 0.8px 1px 1px #b36b00;
+  color: #242424;
 }
 
 .removePadding {
@@ -445,7 +452,12 @@ export default {
 }
 
 .fav-star {
-  position: absolute;
-  width: 60px;
+  width: 35px;
+}
+
+#name-title {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 0px;
 }
 </style>

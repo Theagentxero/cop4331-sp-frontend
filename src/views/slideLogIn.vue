@@ -515,7 +515,6 @@ input {
   width: 850px;
   max-width: 100%;
   min-height: 480px;
-  // margin-top: 10%;
   top: 20vh;
 }
 
