@@ -14,7 +14,14 @@ export default new Vuex.Store({
             first_name: null,
             last_name: null
         },
-        contacts: []
+        contacts: [],
+        meta: {
+            totalPages: 1,
+            perPage: 24,
+            count: 0,
+            page: 1,
+
+        }
     },
     getters: {
         getFullName: state => {
@@ -44,7 +51,19 @@ export default new Vuex.Store({
         },
         getContactByLocalID: state => contact => {
             return state.contacts.filter((c)=> c.localID == contact.localID)[0];
-        }
+        },
+        perPage: state =>{
+            return  state.meta.perPage;
+        },
+        totalPages: state =>{
+            return state.meta.totalPages;
+        },
+        currentPage: state =>{
+            return state.meta.page;
+        },
+        totalContacts: state =>{
+            return state.meta.count;
+        },
     },
     mutations: {
         logout(state) {
@@ -67,6 +86,9 @@ export default new Vuex.Store({
             contacts.forEach(cont => {
                 state.contacts.push( new Contact(cont));
             });
+            state.meta.totalPages = payload.meta.totalPages;
+            state.meta.count = payload.meta.totalContacts;
+            state.meta.page = payload.meta.currentPage + 1;
         },
         addContact(state, payload) {
             //var newContact = payload.contact;

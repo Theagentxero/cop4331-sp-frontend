@@ -58,7 +58,7 @@ export default {
       instance.post('api/contacts/search', this.searchParams)
       .then(async (response) => {
         this.pageStatus.waitingOnAPICall = false;
-        this.$store.commit({type: 'loadContacts', amount: response.data.result})
+        this.$store.commit({type: 'loadContacts', contacts: response.data.result, meta:response.data.meta})
         this.$emit('searchContacts', response.data.result)
       })
       .catch((error) => {
