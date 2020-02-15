@@ -80,6 +80,11 @@
         placeholder="Password"
         required
       />
+
+      <div class="form-group">
+          <font size="2" id="error" color="red"></font>
+ 	    </div>
+
       <b-button type="submit" variant="warning" @click="signIn">Sign In</b-button>
     </b-form>
     <div class="overlay-container">
@@ -242,7 +247,21 @@ export default {
 		  
 		  // 400 code means invalid email has been written
 		  // 403 code means valid email but not existing user
-		  // 401 means email exists but password is wrongh
+      // 401 means email exists but password is wrong
+      
+      if (errorNum == 400)
+       {
+         document.getElementById('error').innerHTML = "Oops, that password is wrong"; 
+       }
+       if (errorNum == 401)
+       {
+         document.getElementById('error').innerHTML = "Oops, that password is wrong";
+
+       }
+       if (errorNum == 403)
+       {
+         document.getElementById('error').innerHTML = "We don't recognize this email, let's create an account!"; 
+       }
 
         });
     },
@@ -493,7 +512,7 @@ input {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   position: relative;
   overflow: hidden;
-  width: 768px;
+  width: 850px;
   max-width: 100%;
   min-height: 480px;
   // margin-top: 10%;
