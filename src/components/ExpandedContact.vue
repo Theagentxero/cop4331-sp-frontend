@@ -225,7 +225,7 @@ export default {
             console.log(this.contact.dbPrep());
             var file = document.getElementById('contactimg-' + this.contact.id);
             var fdata = new FormData();
-            if( _.has(file, "files") && file.files && file.files != undefined){
+            if(file.files && file.files != undefined){
               // User Has New Image To Upload
               fdata.append("contactimg", file.files[0]);
               formData.post(`img/contact/${this.contact.id}`, fdata)
