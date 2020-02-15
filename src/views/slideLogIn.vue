@@ -71,7 +71,7 @@
       <h1>Sign in</h1>
       <b-form-input 
         v-model="username" 
-        id="signInEmail" 
+        :id="`signInEmail`" 
         type="email"
         required
 		placeholder="Email" 
@@ -83,6 +83,15 @@
         required
         placeholder="Password"
       />
+
+      <div class="form-group">
+    <font size="2" id="error" color="red"></font>
+	</div>
+
+  <div class="form-group">
+    <font size="2" id="success" color="green"></font>
+	</div>
+
       <b-button type="submit" variant="warning">Sign In</b-button>
     </b-form>
     <div class="overlay-container">
@@ -146,7 +155,6 @@ export default {
         return "Must Be A Valid Email";
       }
     },
-
   data() {
     return {
       username: "",
@@ -242,9 +250,26 @@ export default {
 		  // TODO: Handle Errors
 		  var errorNum = error.response.status
 		  
-		  // 400 code means invalid email has been written
+		  // 400 code means invalid email has been written -- Don't think this will ever be executed 
+      // but just in case
 		  // 403 code means valid email but not existing user
-		  // 401 means email exists but password is wrongh
+      // 401 means email exists but password is wrong 
+
+      alert(errorNum);
+      
+      if (errorNum == 400)
+      {
+        document.getElementById('error').innerHTML = "Oops, that password is wrong"; 
+      }
+      if (errorNum == 401)
+      {
+        document.getElementById('error').innerHTML = "Oops, that password is wrong";
+
+      }
+      if (errorNum == 403)
+      {
+        document.getElementById('error').innerHTML = "We don't recognize this email, let's create an account!"; 
+      }
 
         });
     },
