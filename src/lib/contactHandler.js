@@ -53,8 +53,22 @@ class Contact{
     getPhoneNumbers(){
         return this.phoneNumbers;
     }
+    getFirstPhone(){
+        if(this.phoneNumbers.length > 0){
+            return phoneLib.format(this.phoneNumbers[0].value)
+        }else{
+            return "";
+        }
+    }
     getEmails(){
         return this.emails;
+    }
+    getFirstEmail(){
+        if(this.emails.length > 0){
+            return this.emails[0].value;
+        }else{
+            return "";
+        }
     }
     dbPrep(){
         var x = {

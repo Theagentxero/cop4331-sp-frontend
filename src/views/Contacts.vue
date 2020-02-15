@@ -7,8 +7,11 @@
     <!-- <ContactList :contactSections='contactSections'/> -->
     <div>
         <b-container class="contacts p-2">
-            <b-row>
+            <b-row v-if="false">
                 <contact-item @deleted="delUpdate" v-for="contact in allContacts" :key="contact.localID" :initContact="contact"/>
+            </b-row>
+            <b-row v-else>
+                <contact-long @deleted="delUpdate" v-for="contact in allContacts" :key="contact.localID" :initContact="contact"/>
             </b-row>
         </b-container>
     </div>
@@ -20,6 +23,7 @@ import Navbar from './Navbar.vue';
 import AddContact from './AddContact.vue'
 //import ContactList from './ContactList.vue'
 import ContactItem from './ContactItem.vue'
+import ContactItemLong from './ContactItemLong.vue'
 
 const _ = require('underscore');
 const axios = require('axios');
@@ -35,6 +39,7 @@ export default {
   name: 'Contacts',
   components: {
       'contact-item': ContactItem,
+      'contact-long': ContactItemLong,
     Navbar,
     AddContact,
     //ContactList
@@ -73,7 +78,8 @@ export default {
     },
     delUpdate(){
         this.contactSections = this.$store.getters.getContacts;
-    }
+    },
+    
   },
   beforeMount() {
 
@@ -86,10 +92,10 @@ export default {
 $dark-orange: #FFC107;
 
 .contacts{
-  background: linear-gradient(to right, $dark-orange, $warning-variant);
+  //background: linear-gradient(to right, $dark-orange, $warning-variant);
   margin-top: 5rem;
   margin-bottom: 5rem;
-  box-shadow: 0px 0px 10px 3.5px gray;
+  //box-shadow: 0px 0px 10px 3.5px gray;
   h1{
     font-size: 20px;
   }
@@ -97,5 +103,6 @@ $dark-orange: #FFC107;
     width: 90px;
   }
 }
+
 
 </style>
