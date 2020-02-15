@@ -24,6 +24,7 @@
             :id="`signUplName`"
             type="text"
             placeholder="Last Name"
+            required
           />
         </b-col>
 
@@ -43,7 +44,6 @@
         :id="`signUpPassword`"
         type="password"
         placeholder="Password"
-        required
       />
 
       <b-popover
@@ -62,7 +62,7 @@
         placeholder="Re-enter password"
         required
       />
-      <b-button type="submit" variant="warning" @click="signUp">Sign Up</b-button>
+      <b-button type="submit" variant="warning" >Sign Up</b-button>
     </b-form>
     <b-form class="form-container sign-in-container" @submit="signIn">
       <h1>Sign in</h1>
@@ -85,7 +85,7 @@
           <font size="2" id="error" color="red"></font>
  	    </div>
 
-      <b-button type="submit" variant="warning" @click="signIn">Sign In</b-button>
+      <b-button type="submit" variant="warning" >Sign In</b-button>
     </b-form>
     <div class="overlay-container">
       <div class="overlay">
@@ -251,7 +251,7 @@ export default {
       
       if (errorNum == 400)
        {
-         document.getElementById('error').innerHTML = "Oops, that password is wrong"; 
+         document.getElementById('error').innerHTML = "Please enter a valid email"; 
        }
        if (errorNum == 401)
        {
