@@ -228,7 +228,7 @@ export default {
             if(file.files && file.files != undefined){
               // User Has New Image To Upload
               fdata.append("contactimg", file.files[0]);
-              formData.post(`https://img.crabrr.com//contact/${this.contact.id}`, fdata)
+              formData.post(`https://img.crabrr.com/contact/${this.contact.id}`, fdata)
                 .then(async (response) => {
                   this.triggerPhotoUpdate();
                 })
