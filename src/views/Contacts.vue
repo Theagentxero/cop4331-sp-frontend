@@ -147,12 +147,15 @@ $dark-orange: #FFC107;
 .page-item {
     .page-link {
         color: #D77B09;
+        &:hover {
+            color: #D77B09;
+        }
     }
 }
-.page-item.active {
+.active {
     .page-link {
-        background-color: #D77B09;
-        border-color: #D77B09;
+        background-color: #D77B09 !important;
+        border-color: #D77B09 !important;
     }
 }
 </style>
