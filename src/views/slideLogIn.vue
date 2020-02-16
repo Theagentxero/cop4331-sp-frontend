@@ -37,9 +37,6 @@
         required
       />
 
-      <div class="form-group">
-          <font size="2" id="error-signup" color="red"></font>
- 	    </div>
 
       <b-form-input
         v-model="signUpForm.form.password"
@@ -66,6 +63,14 @@
         placeholder="Re-enter password"
         required
       />
+
+      <div class="form-group">
+          <font size="2" id="error-signup" color="red"></font>
+ 	    </div>
+      <div class="form-group">
+          <font size="2" id="succesfull-SignUp" color="green"></font>
+ 	    </div>
+
       <b-button type="submit" variant="warning" >Sign Up</b-button>
     </b-form>
     <b-form class="form-container sign-in-container" @submit="signIn">
@@ -260,12 +265,10 @@ export default {
        if (errorNum == 401)
        {
          document.getElementById('error').innerHTML = "Oops, that password is wrong";
-
        }
        if (errorNum == 403)
        {
          document.getElementById('error').innerHTML = "We don't recognize this email, let's create an account!"; 
-      //  error-signup
        }
 
         });
@@ -288,16 +291,19 @@ export default {
         .then(response => {
           this.formComplete = true;
           this.formWaiting = false;
+          document.getElementById('succesfull-SignUp').innerHTML = "Account Created Succesfully! :)";
         })
         .catch(error => {
           this.formFailed = true;
           this.formWaiting = false;
           if (error.response.data.status == 403) {
-            document.getElementById('error-signup').innerHTML = "This e-mail is already being used, Try signing in"; 
+            document.getElementById('error-signup').innerHTML = "Oh oh, this e-mail is already being used."; 
+          }
+          else{
+            document.getElementById('error-signup').innerHTML = "Unexpected error, :("; 
           }
           // Can Throw ERRORS
           // 403 - Username already exists
-          console.log(error);
         });
       //alert(JSON.stringify(this.form));
     },
