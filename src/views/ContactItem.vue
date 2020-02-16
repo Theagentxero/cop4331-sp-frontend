@@ -4,7 +4,7 @@
             variant="our-orange" 
             :pressed.sync="selected"
         >
-            <b-img-lazy :src="'/img/contact/' + contact.id" class="contact-icon mt-2"/>
+            <b-img-lazy :src="'http://img.crabrr.com/contact/' + contact.id" class="contact-icon mt-2"/>
         </b-button>
         <h1 v-if="contact.firstName != ''">{{contact.firstName}}</h1>
         <h1 v-else-if="contact.middleName != ''">{{contact.middleName}}</h1>

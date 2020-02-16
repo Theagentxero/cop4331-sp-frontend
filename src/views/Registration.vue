@@ -219,7 +219,7 @@ export default {
             var values = _.clone(this.form);
             values.password = sha256(values.password);
             values.verifyPassword = null;
-            axios.post('api/auth/create.json', values)
+            axios.post('https://api.crabrr.com/auth/create.json', values)
             .then((response) => {
                 this.formComplete = true;
                 this.formWaiting = false;

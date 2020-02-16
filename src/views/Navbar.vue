@@ -55,7 +55,7 @@ export default {
   methods: {
     searchContacts() {
       this.pageStatus.waitingOnAPICall = true;
-      instance.post('api/contacts/search', this.searchParams)
+      instance.post('https://api.crabrr.com/contacts/search', this.searchParams)
       .then(async (response) => {
         this.pageStatus.waitingOnAPICall = false;
         this.$store.commit({type: 'loadContacts', contacts: response.data.result, meta:response.data.meta})
@@ -79,7 +79,7 @@ export default {
             }
         }
         this.pageStatus.waitingOnAPICall = true;
-        instance.post('api/contacts/search', params)
+        instance.post('https://api.crabrr.com/contacts/search', params)
         .then(async (response) => {
             this.pageStatus.waitingOnAPICall = false;
             this.$store.commit({type: 'loadContacts', amount: response.data.result})
@@ -93,7 +93,7 @@ export default {
     },
     signOut(){
         // Clear Cookies
-        instance.get('api/auth/logout.json')
+        instance.get('https://api.crabrr.com/auth/logout.json')
             .then(async (response) => {
                 if(response.status == 200){
                     // Clear Vuex
