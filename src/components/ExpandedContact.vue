@@ -162,7 +162,7 @@ export default {
             event.preventDefault();
             this.pageStatus.waitingOnAPICall = true;
             instance
-            .delete('https://api.crabrr.com/contacts/${this.contact._id}`)
+            .delete(`https://api.crabrr.com/contacts/${this.contact._id}`)
             .then(async response => {
                 this.pageStatus.waitingOnAPICall = false;
                 this.$store.commit({
@@ -204,7 +204,7 @@ export default {
         },
         favoriteContact(){
           this.contact.favorite = !this.contact.favorite;
-          instance.put('https://api.crabrr.com/contacts/${this.contact.id}`, this.contact.dbPrep())
+          instance.put(`https://api.crabrr.com/contacts/${this.contact.id}`, this.contact.dbPrep())
             .then(async (response) => {
               console.log(response.data)
               console.log("Added Favorite Successfully");
@@ -238,7 +238,7 @@ export default {
                 });
             }
             
-            instance.put('https://api.crabrr.com/contacts/${this.contact.id}`, this.contact.dbPrep())
+            instance.put(`https://api.crabrr.com/contacts/${this.contact.id}`, this.contact.dbPrep())
               .then(async (response) => {
                 //console.log(response.data)
                 this.pageStatus.waitingOnAPICall = false
@@ -262,7 +262,7 @@ export default {
         },
         deleteContact(event) {
             this.pageStatus.waitingOnAPICall = true;
-            instance.delete('https://api.crabrr.com/contacts/${this.contact.id}`)
+            instance.delete(`https://api.crabrr.com/contacts/${this.contact.id}`)
                 .then(async (response) => {
                     this.pageStatus.waitingOnAPICall = false;
                     this.$store.commit('deleteContact', {contact: this.contact.id});
@@ -299,7 +299,7 @@ export default {
             // User Selected A File To Upload
             var fdata = new FormData();
               fdata.append("contactimg", contactFileUpload.files[0]);
-              formData.post(`img/preview`, fdata)
+              formData.post(`http://img.crabrr.com/preview`, fdata)
                 .then(async (response) => {
                   console.log(response.data);
                   document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', response.data);
