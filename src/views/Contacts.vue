@@ -6,22 +6,26 @@
 
     <!-- <ContactList :contactSections='contactSections'/> -->
     <div>
-        <b-container class="contacts p-2">
+        <b-container>
             <b-row>
-                <contact-item @deleted="delUpdate" v-for="contact in allContacts" :key="contact.localID" :initContact="contact"/>
+                <b-container class="contacts p-2">
+                    <b-row>
+                        <contact-item @deleted="delUpdate" v-for="contact in allContacts" :key="contact.localID" :initContact="contact"/>
+                    </b-row>
+                </b-container>
+            </b-row>
+            <b-row >
+                <b-pagination 
+                    class="pagination"
+                    v-if="!pageStatus.waitingOnAPICall"
+                    align="right"
+                    v-model="currentPage"
+                    v-on:change="pageChanges($event)"
+                    :total-rows="count"
+                    :per-page="perPage"
+                ></b-pagination>
             </b-row>
         </b-container>
-      <b-row >
-          <b-pagination 
-              class="pagination"
-              v-if="!pageStatus.waitingOnAPICall"
-              align="right"
-              v-model="currentPage"
-              v-on:change="pageChanges($event)"
-              :total-rows="count"
-              :per-page="perPage"
-            ></b-pagination>
-      </b-row>
     </div>
   </div>
 </template>
@@ -62,7 +66,7 @@ export default {
     }
   },
   computed:{
-      allContacts(){
+      allContacts() {
           return this.$store.getters.getContacts;
       }
   },
@@ -92,10 +96,10 @@ export default {
         this.count = this.$store.getters.totalContacts;
         this.perPage = this.$store.getters.perPage;
     },
-    delUpdate(){
+    delUpdate() {
         this.contactSections = this.$store.getters.getContacts;
     },
-    pageChanges(event){
+    pageChanges(event) {
       console.log(event);
       this.pageStatus.waitingOnAPICall = true;
       instance.get(`api/contacts?page=${event-1}&perpage=${this.perPage}`)
@@ -116,7 +120,6 @@ export default {
     }
   },
   beforeMount() {
-
     this.fetchContacts();
   }
 }
@@ -125,17 +128,12 @@ export default {
 <style lang="scss" scoped>
 $dark-orange: #FFC107;
 
-.pagination {
-  margin-left: 10em;
-}
-
-
-.contacts{
+.contacts {
   background: linear-gradient(to right, $dark-orange, $warning-variant);
   margin-top: 5rem;
   margin-bottom: 5rem;
   box-shadow: 0px 0px 10px 3.5px gray;
-  h1{
+  h1 {
     font-size: 20px;
   }
   .contact-icon {
@@ -143,4 +141,18 @@ $dark-orange: #FFC107;
   }
 }
 
+</style>
+
+<style lang="scss">
+.page-item {
+    .page-link {
+        color: #D77B09;
+    }
+}
+.page-item.active {
+    .page-link {
+        background-color: #D77B09;
+        border-color: #D77B09;
+    }
+}
 </style>
