@@ -14,7 +14,7 @@
                 // Navbar User Dropdown
                 b-nav-item-dropdown
                     template(v-slot:button-content='')
-                        em User
+                        em(style="color: black") User
                     b-dropdown-item(href='#') Edit Info
                     b-dropdown-item(href='#', v-on:click='signOut') Sign Out
             // Right Aligned Navbar Items
@@ -123,6 +123,7 @@ export default {
 
 <style lang="scss" scoped>
 $dark-orange: #FFC107;
+
 #navbar{
   background: linear-gradient(to right, $dark-orange, $warning-variant);
   box-shadow: 0px 0px 5px 2px $warning-variant;
@@ -138,9 +139,25 @@ $dark-orange: #FFC107;
   .nav-link {
     color: #000;
   }
+  
 }
 
 #brand-icon {
   width: 60px;
+}
+</style>
+
+<style lang="scss">
+.dropdown-item {
+  color: black !important;
+  &:hover {
+    // color
+  }
+  &:active {
+    background-color: #fcb219 !important;
+  }
+  &:focus {
+    
+  }
 }
 </style>
