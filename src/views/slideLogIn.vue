@@ -65,10 +65,10 @@
       />
 
       <div class="form-group">
-          <font size="2" id="error-signup" color="red"></font>
+          <font size="2" id="error-signup" color="red">{{errorMSG}}</font>
  	    </div>
       <div class="form-group">
-          <font size="2" id="succesfull-SignUp" color="green"></font>
+          <font size="2" id="succesfull-SignUp" color="green">{{successMSG}}</font>
  	    </div>
 
       <b-button type="submit" variant="warning" >Sign Up</b-button>
@@ -139,6 +139,8 @@ export default {
   name: "login",
   data() {
     return {
+      errorMSG: "",
+      successMSG: "",
       username: "",
 	  fNActive: false,
 	  lNActive: false,
@@ -291,17 +293,19 @@ export default {
         .then(response => {
           this.formComplete = true;
           this.formWaiting = false;
-          document.getElementById('succesfull-SignUp').innerHTML = "Account Created Succesfully! :)";
+          this.successMSG = "Account Created Successfully :)";
+          this.errorMSG = "";
         })
         .catch(error => {
           this.formFailed = true;
           this.formWaiting = false;
           if (error.response.data.status == 403) {
-            document.getElementById('error-signup').innerHTML = "Oh oh, this e-mail is already being used."; 
+            this.errorMSG = "Oh oh, this e-mail is already being used."; 
           }
           else{
-            document.getElementById('error-signup').innerHTML = "Unexpected error, :("; 
+            this.errorMSG = "Unexpected error, :("; 
           }
+          this.successMSG = "";
           // Can Throw ERRORS
           // 403 - Username already exists
         });
@@ -397,7 +401,9 @@ export default {
 
 <style lang="scss" scoped>
 $dark-orange: #FFC107;
-
+.errorMessageGone {
+  display: none;
+}
 
 * {
   box-sizing: border-box;
