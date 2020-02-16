@@ -9,7 +9,7 @@
     <b-row class="reducePaddingNotMarin">
       <b-col cols="3">
         <b-row>
-          <img class="img-fluid" :id="'contact-img-' + contact.id" :src="'http://img.crabrr.com/contact/' + contact.id" />
+          <img class="img-fluid" :id="'contact-img-' + contact.id" :src="'https://img.crabrr.com/contact/' + contact.id" />
           <form :id="'imageUploadForm-' + contact.id" style="display:none;">
             <input type="file" :id="'contactimg-' + contact.id" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp" style="display:none;" />
           </form>
@@ -152,7 +152,7 @@ export default {
             event.preventDefault();
             this.notEditable = true;
             this.contact = new Contact(this.originalContact);
-            document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', 'http://img.crabrr.com/contact/' + this.contact.id);
+            document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', 'https://img.crabrr.com/contact/' + this.contact.id);
         },
         closeComponent(event) {
             event.preventDefault();
@@ -228,7 +228,7 @@ export default {
             if(file.files && file.files != undefined){
               // User Has New Image To Upload
               fdata.append("contactimg", file.files[0]);
-              formData.post(`img/contact/${this.contact.id}`, fdata)
+              formData.post(`https://img.crabrr.com//contact/${this.contact.id}`, fdata)
                 .then(async (response) => {
                   this.triggerPhotoUpdate();
                 })
@@ -299,7 +299,7 @@ export default {
             // User Selected A File To Upload
             var fdata = new FormData();
               fdata.append("contactimg", contactFileUpload.files[0]);
-              formData.post(`http://img.crabrr.com/preview`, fdata)
+              formData.post(`https://img.crabrr.com/preview`, fdata)
                 .then(async (response) => {
                   console.log(response.data);
                   document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', response.data);
