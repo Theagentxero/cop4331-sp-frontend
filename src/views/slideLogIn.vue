@@ -647,4 +647,8 @@ input {
 .container-fluid.right-panel-active .overlay-right {
   transform: translateX(20%);
 }
+
+.btn-warning {
+  color: #242424;
+}
 </style>

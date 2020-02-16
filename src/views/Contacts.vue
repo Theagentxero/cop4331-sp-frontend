@@ -146,16 +146,20 @@ $dark-orange: #FFC107;
 <style lang="scss">
 .page-item {
     .page-link {
-        color: #D77B09;
+        color: black;
         &:hover {
-            color: #D77B09;
+            color: black;
+        }
+        &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(246, 156, 40, 0.5);
         }
     }
 }
 .active {
     .page-link {
-        background-color: #D77B09 !important;
-        border-color: #D77B09 !important;
+        color: black !important;
+        background-color: #f69c28 !important;
+        border-color: #f69c28 !important;
     }
 }
 </style>
