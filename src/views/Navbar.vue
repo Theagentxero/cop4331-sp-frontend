@@ -20,7 +20,7 @@
             // Right Aligned Navbar Items
             b-navbar-nav.ml-auto
                 b-nav-form(@submit.stop.prevent='searchContacts')
-                    b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='sm', :placeholder="(searchParams.options.onlyFavorites) ? 'Looking for crabbie...' : 'Searching favorite crabbies...'")
+                    b-form-input#search-field.mr-sm-2(v-model='searchParams.search', size='sm', :placeholder="(searchParams.options.onlyFavorites) ? 'Searching favorite crabbies...' : 'Looking for crabbie...'")
                     b-button.my-2.my-sm-0(type="submit", size='sm', variant="warning") Search
 </template>
 
@@ -71,25 +71,14 @@ export default {
         // Toggle Favorites
         this.searchParams.options.onlyFavorites = !this.searchParams.options.onlyFavorites;
         // Clean Search
-        var params = {
+        this.searchParams = {
             search: "",
             include: [],
             options: {
                 onlyFavorites: this.searchParams.options.onlyFavorites
             }
         }
-        this.pageStatus.waitingOnAPICall = true;
-        instance.post('api/contacts/search', params)
-        .then(async (response) => {
-            this.pageStatus.waitingOnAPICall = false;
-            this.$store.commit({type: 'loadContacts', amount: response.data.result})
-        })
-        .catch((error) => {
-            this.pageStatus.waitingOnAPICall = false;
-            // TODO: Handle Errors
-            console.log(error);
-        });
-        // emit this.contactSections = this.$store.getters.getContacts;
+        this.searchContacts();
     },
     signOut(){
         // Clear Cookies
