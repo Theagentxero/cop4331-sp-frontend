@@ -10,16 +10,18 @@
             <b-row>
                 <contact-item @deleted="delUpdate" v-for="contact in allContacts" :key="contact.localID" :initContact="contact"/>
             </b-row>
-            <b-row>
-          <b-pagination v-if="!pageStatus.waitingOnAPICall"
+        </b-container>
+      <b-row >
+          <b-pagination 
+              class="pagination"
+              v-if="!pageStatus.waitingOnAPICall"
               align="right"
               v-model="currentPage"
               v-on:change="pageChanges($event)"
               :total-rows="count"
               :per-page="perPage"
             ></b-pagination>
-          </b-row>
-        </b-container>
+      </b-row>
     </div>
   </div>
 </template>
@@ -122,6 +124,11 @@ export default {
 
 <style lang="scss" scoped>
 $dark-orange: #FFC107;
+
+.pagination {
+  margin-left: 10em;
+}
+
 
 .contacts{
   background: linear-gradient(to right, $dark-orange, $warning-variant);
