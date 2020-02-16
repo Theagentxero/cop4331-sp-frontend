@@ -79,7 +79,7 @@ const router = new VueRouter({
 router.beforeEach( async (to, from, next) => {
     // Checks if we can bypass login
     if(to.meta.checkForAutoLogin){
-        instance.get('api/auth/checkAuth.json')
+        instance.get('https://api.crabrr.com/auth/checkAuth.json')
             .then(async (response) => {
                 if(response.status == 200){
                     // Setup Store
@@ -126,7 +126,7 @@ router.beforeEach( async (to, from, next) => {
             next();
         }else{
             // TODO: This should make an auth request that will check the users cookie to check if the user is already logged in, and log them in on this instance
-            instance.get('api/auth/checkAuth.json')
+            instance.get('https://api.crabrr.com/auth/checkAuth.json')
             .then(async (response) => {
                 if(response.status == 200){
                     // Setup Store

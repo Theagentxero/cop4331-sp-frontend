@@ -217,7 +217,7 @@ export default {
       values.username = this.username;
       values.password = sha256(this.signInForm.form.password);
       instance
-        .post("api/auth/login.json", values)
+        .post("https://api.crabrr.com/auth/login.json", values)
         .then(async response => {
           this.formComplete = true;
           this.formWaiting = false;
@@ -289,7 +289,7 @@ export default {
       values.password = sha256(values.password);
       values.verifyPassword = null;
       axios
-        .post("api/auth/create.json", values)
+        .post("https://api.crabrr.com/auth/create.json", values)
         .then(response => {
           this.formComplete = true;
           this.formWaiting = false;

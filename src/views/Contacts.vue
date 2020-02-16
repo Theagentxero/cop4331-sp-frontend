@@ -73,7 +73,7 @@ export default {
   methods: {
     fetchContacts() {
         this.pageStatus.waitingOnAPICall = true;
-        instance.get('api/contacts')
+        instance.get('https://api.crabrr.com/contacts')
             .then(async (response) => {
               console.log("received response")
                 this.pageStatus.waitingOnAPICall = false;
@@ -102,7 +102,7 @@ export default {
     pageChanges(event) {
       console.log(event);
       this.pageStatus.waitingOnAPICall = true;
-      instance.get(`api/contacts?page=${event-1}&perpage=${this.perPage}`)
+      instance.get(`https://api.crabrr.com/contacts?page=${event-1}&perpage=${this.perPage}`)
         .then(async (response) => {
           this.pageStatus.waitingOnAPICall = false;
           this.$store.commit('loadContacts', {contacts: response.data.result, meta:response.data.meta});

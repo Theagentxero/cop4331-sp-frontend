@@ -111,7 +111,7 @@ export default {
             this.formWaiting = true;
             var values = _.clone(this.form);
             values.password = sha256(values.password);
-            instance.post('api/auth/login.json', values)
+            instance.post('https://api.crabrr.com/auth/login.json', values)
             .then(async (response) => {
                 this.formComplete = true;
                 this.formWaiting = false;

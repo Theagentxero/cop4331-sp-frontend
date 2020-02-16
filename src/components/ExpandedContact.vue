@@ -9,7 +9,7 @@
     <b-row class="reducePaddingNotMarin">
       <b-col cols="3">
         <b-row>
-          <img class="img-fluid" :id="'contact-img-' + contact.id" :src="'/img/contact/' + contact.id" />
+          <img class="img-fluid" :id="'contact-img-' + contact.id" :src="'https://img.crabrr.com/contact/' + contact.id" />
           <form :id="'imageUploadForm-' + contact.id" style="display:none;">
             <input type="file" :id="'contactimg-' + contact.id" name="contactimg" accept="image/png, image/jpeg, image/gif, image/tiff, image/bmp" style="display:none;" />
           </form>
@@ -152,7 +152,7 @@ export default {
             event.preventDefault();
             this.notEditable = true;
             this.contact = new Contact(this.originalContact);
-            document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', '/img/contact/' + this.contact.id);
+            document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', 'https://img.crabrr.com/contact/' + this.contact.id);
         },
         closeComponent(event) {
             event.preventDefault();
@@ -162,7 +162,7 @@ export default {
             event.preventDefault();
             this.pageStatus.waitingOnAPICall = true;
             instance
-            .delete(`api/contacts/${this.contact._id}`)
+            .delete(`https://api.crabrr.com/contacts/${this.contact._id}`)
             .then(async response => {
                 this.pageStatus.waitingOnAPICall = false;
                 this.$store.commit({
@@ -204,7 +204,7 @@ export default {
         },
         favoriteContact(){
           this.contact.favorite = !this.contact.favorite;
-          instance.put(`api/contacts/${this.contact.id}`, this.contact.dbPrep())
+          instance.put(`https://api.crabrr.com/contacts/${this.contact.id}`, this.contact.dbPrep())
             .then(async (response) => {
               console.log(response.data)
               console.log("Added Favorite Successfully");
@@ -228,7 +228,7 @@ export default {
             if(file.files && file.files != undefined){
               // User Has New Image To Upload
               fdata.append("contactimg", file.files[0]);
-              formData.post(`img/contact/${this.contact.id}`, fdata)
+              formData.post(`https://img.crabrr.com/contact/${this.contact.id}`, fdata)
                 .then(async (response) => {
                   this.triggerPhotoUpdate();
                 })
@@ -238,7 +238,7 @@ export default {
                 });
             }
             
-            instance.put(`api/contacts/${this.contact.id}`, this.contact.dbPrep())
+            instance.put(`https://api.crabrr.com/contacts/${this.contact.id}`, this.contact.dbPrep())
               .then(async (response) => {
                 //console.log(response.data)
                 this.pageStatus.waitingOnAPICall = false
@@ -262,7 +262,7 @@ export default {
         },
         deleteContact(event) {
             this.pageStatus.waitingOnAPICall = true;
-            instance.delete(`api/contacts/${this.contact.id}`)
+            instance.delete(`https://api.crabrr.com/contacts/${this.contact.id}`)
                 .then(async (response) => {
                     this.pageStatus.waitingOnAPICall = false;
                     this.$store.commit('deleteContact', {contact: this.contact.id});
@@ -299,7 +299,7 @@ export default {
             // User Selected A File To Upload
             var fdata = new FormData();
               fdata.append("contactimg", contactFileUpload.files[0]);
-              formData.post(`img/preview`, fdata)
+              formData.post(`https://img.crabrr.com/preview`, fdata)
                 .then(async (response) => {
                   console.log(response.data);
                   document.getElementById('contact-img-' + this.contact.id).setAttribute( 'src', response.data);

@@ -237,7 +237,7 @@ export default {
         },
         createContact(payload) {
             this.pageStatus.waitingOnAPICall = true;
-            instance.post('api/contacts', payload)
+            instance.post('https://api.crabrr.com/contacts', payload)
                 .then(async (response) => {
                     this.pageStatus.waitingOnAPICall = false;
                     this.$store.commit('addContact', {contact: response.data.result})
