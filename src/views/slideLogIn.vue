@@ -37,6 +37,10 @@
         required
       />
 
+      <div class="form-group">
+          <font size="2" id="error-signup" color="red"></font>
+ 	    </div>
+
       <b-form-input
         v-model="signUpForm.form.password"
         :state="(pActive) ? password_name_state : null"
@@ -261,6 +265,7 @@ export default {
        if (errorNum == 403)
        {
          document.getElementById('error').innerHTML = "We don't recognize this email, let's create an account!"; 
+      //  error-signup
        }
 
         });
@@ -288,8 +293,7 @@ export default {
           this.formFailed = true;
           this.formWaiting = false;
           if (error.response.data.status == 403) {
-            // TODO: This means that the user already exits
-            // Put Something On The Screen To Say That
+            document.getElementById('error-signup').innerHTML = "This e-mail is already being used, Try signing in"; 
           }
           // Can Throw ERRORS
           // 403 - Username already exists

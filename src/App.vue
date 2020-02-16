@@ -4,8 +4,12 @@
   </div>
 </template>
 
-
 <style lang="scss">
+html {
+  height: 100vh;
+  background: linear-gradient(110deg, #aec6cf 60%, #c3b091 60%);
+}
+
 #app {
   height: 100vh;
   background: linear-gradient(110deg, #aec6cf 60%, #c3b091 60%);
