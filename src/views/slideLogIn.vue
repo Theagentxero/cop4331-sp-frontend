@@ -77,7 +77,7 @@
       <h1>Sign in</h1>
       <b-form-input 
         v-model="username" 
-        id="signInEmail" 
+        :id="`signInEmail`" 
         type="email"
 		    placeholder="Email" 
         required
@@ -91,10 +91,14 @@
       />
 
       <div class="form-group">
-          <font size="2" id="error" color="red"></font>
- 	    </div>
+    <font size="2" id="error" color="red"></font>
+	</div>
 
-      <b-button type="submit" variant="warning" >Sign In</b-button>
+  <div class="form-group">
+    <font size="2" id="success" color="green"></font>
+	</div>
+
+      <b-button type="submit" variant="warning">Sign In</b-button>
     </b-form>
     <div class="overlay-container">
       <div class="overlay">
@@ -137,6 +141,25 @@ const instance = axios.create({
 
 export default {
   name: "login",
+    computed: {
+      first_name_state() {
+          return this.signUpForm.form.first_name.length > 0 ? true : false
+      },
+      last_name_state() {
+          return this.signUpForm.form.last_name.length > 0 ? true : false
+      },
+      password_name_state() {
+          return this.signUpForm.form.password.length >= 8 ? true : false
+      },
+      verifyPass_name_state() {
+          var pass = this.signUpForm.form.password
+          var verifyPass = this.signUpForm.form.verifyPassword
+          return ((pass == verifyPass) && (verifyPass.length >= 8))
+      },
+      usernameInvalidFeedback() {
+        return "Must Be A Valid Email";
+      }
+    },
   data() {
     return {
       errorMSG: "",
@@ -256,22 +279,26 @@ export default {
 		  // TODO: Handle Errors
 		  var errorNum = error.response.status
 		  
-		  // 400 code means invalid email has been written
+		  // 400 code means invalid email has been written -- Don't think this will ever be executed 
+      // but just in case
 		  // 403 code means valid email but not existing user
-      // 401 means email exists but password is wrong
+      // 401 means email exists but password is wrong 
+
+      alert(errorNum);
       
       if (errorNum == 400)
-       {
-         document.getElementById('error').innerHTML = "Please enter a valid email"; 
-       }
-       if (errorNum == 401)
-       {
-         document.getElementById('error').innerHTML = "Oops, that password is wrong";
-       }
-       if (errorNum == 403)
-       {
-         document.getElementById('error').innerHTML = "We don't recognize this email, let's create an account!"; 
-       }
+      {
+        document.getElementById('error').innerHTML = "Oops, that password is wrong"; 
+      }
+      if (errorNum == 401)
+      {
+        document.getElementById('error').innerHTML = "Oops, that password is wrong";
+
+      }
+      if (errorNum == 403)
+      {
+        document.getElementById('error').innerHTML = "We don't recognize this email, let's create an account!"; 
+      }
 
         });
     },
